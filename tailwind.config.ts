@@ -11,6 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'blue-primary': '#3665C5'
+      },
+      backgroundImage: {
+        'landing-bg': "url('/img/bg-img.png')",
       },
     },
   },
