@@ -17,7 +17,7 @@ const ListMoreContent = () => {
         {loading ? (
           <div>
             <span className="bg-gray-300 h-4 w-3/4 mb-2"></span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[...Array(9)].map((_, index) => (
                 <div
                   key={index}
@@ -37,25 +37,30 @@ const ListMoreContent = () => {
           </div>
         ) : (
           <div>
-            <span className="text-lg md:text-[28px] ">Description</span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <span className="text-lg md:text-[28px] font-bold">
+              Description
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
               {[...Array(8)].map((_, index) => (
                 <div
                   key={index}
-                  className="w-full sm:w-[250px] flex flex-col border border-[#393556]"
+                  className="w-full flex flex-col border border-[#393556] rounded-md overflow-hidden"
                 >
-                  <Image
-                    src="https://images.unsplash.com/photo-1644509781412-ca9bcf885f4d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Picture of the author"
-                    width={292}
-                    height={304}
-                    className="sm:h-max-[300px] h-[300px]"
-                  />
-                  <div className="p-2 gap-2">
-                    <span>Lonely as always</span>
-                    <div className="flex justify-between w-full">
+                  <div className="relative w-full h-[300px]">
+                    <Image
+                      src="https://images.unsplash.com/photo-1644509781412-ca9bcf885f4d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      alt="Picture of the author"
+                      layout="fill" // Use layout fill to cover the container
+                      objectFit="cover" // Ensure image covers the container
+                    />
+                  </div>
+                  <div className="p-4">
+                    <span className="text-md font-semibold block mb-1">
+                      Lonely as always
+                    </span>
+                    <div className="flex justify-between text-sm">
                       <small className="text-[#FFD166]">2.00 ETH</small>
-                      <small>in stock : 3</small>
+                      <small>in stock: 3</small>
                     </div>
                   </div>
                 </div>

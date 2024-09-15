@@ -2,8 +2,9 @@
 const nextConfig = {
   images: {
     domains: ["plus.unsplash.com", "images.unsplash.com"],
+    unoptimized: true, // Nonaktifkan Image Optimization API
   },
-    output: 'export'
+  output: "export",
 };
 
 export default nextConfig;
