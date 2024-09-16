@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +22,10 @@ export default function Header() {
     };
   }, []);
 
+  const handleNavigation = (path) => {
+    router.push(path);
+  };
+
   return (
     <header
       className={`fixed top-0 w-full text-white z-50 transition-colors duration-300 ${
@@ -27,23 +33,31 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 flex justify-between items-center">
-        {/* Left Section (Logo) */}
         <div className="text-3xl font-medium">
           <img src="/img/plantify.png" alt="Local Image" className="h-8" />
         </div>
 
-        {/* Right Section (Nav Links) */}
         <nav className="hidden md:flex space-x-8">
-          <a className="cursor-pointer text-gray-300 hover:text-white font-semibold">
+          <a
+            className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/")}
+          >
             Home
           </a>
-          <a className="cursor-pointer text-gray-300 hover:text-white font-semibold">
+          <a
+            className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+          >
             About
           </a>
-          <a className="cursor-pointer text-gray-300 hover:text-white font-semibold">
+          <a
+            className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/marketplace")}
+          >
             Marketplace
           </a>
-          <a className="cursor-pointer text-gray-300 hover:text-white font-semibold">
+          <a
+            className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+          >
             How It Works
           </a>
         </nav>
