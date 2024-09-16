@@ -36,7 +36,7 @@ const ListMoreContent = () => {
             </div>
           </div>
         ) : (
-          <div>
+          <div className="pb-32">
             <span className="text-lg md:text-[28px] font-bold">
               Description
             </span>

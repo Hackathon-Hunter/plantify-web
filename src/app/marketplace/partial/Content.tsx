@@ -14,7 +14,7 @@ const Content = () => {
   }, []);
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 pt-32 max-w-6xl mx-auto fsac4 md:px-1 px-3">
+      <div className="flex flex-col md:flex-row gap-4 pt-32 max-w-6xl mx-auto fsac4 md:px-1 px-3 pb-96">
         <div className="w-full md:h-screen md:p-5 md:w-auto">
           <div className="flex flex-col gap-3">
             <div>

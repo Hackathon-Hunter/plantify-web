@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Content from "./partial/Content";
 
 export default function Marketplace() {
@@ -9,6 +10,7 @@ export default function Marketplace() {
     <div>
       <Header />
       <Content />
+      <Footer />
     </div>
   );
 }
