@@ -37,7 +37,7 @@ export default function Profile() {
               className="border rounded-md p-4 flex justify-between"
               key={index}
             >
-              <div className="flex gap-3">
+              <div className="flex items-center gap-3">
                 <Image
                   src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="profile"
