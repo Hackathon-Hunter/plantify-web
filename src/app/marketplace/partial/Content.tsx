@@ -40,28 +40,25 @@ const Content: React.FC = () => {
         <div className="w-full md:h-screen md:p-5 md:w-auto">
           <div className="flex flex-col gap-3">
             <div>
-              <label htmlFor="search">Search</label>
+              <label htmlFor="">Search</label>
               <input
                 id="search"
                 type="text"
                 placeholder="Search ..."
-                className="w-full px-4 py-2 bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div>
-              <label htmlFor="selectType">Select Type</label>
-              <select
-                id="selectType"
-                className="w-full px-4 py-2 bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
+              <label htmlFor="">Search</label>
+              <select className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="" className="text-black">
                   Select Type
                 </option>
                 <option value="" className="text-black">
-                  Option 1
+                  haha
                 </option>
                 <option value="" className="text-black">
-                  Option 2
+                  haha
                 </option>
               </select>
             </div>
