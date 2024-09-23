@@ -5,6 +5,13 @@ const nextConfig = {
     unoptimized: true, // Nonaktifkan Image Optimization API
   },
   output: "export",
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.did$/,
+      use: 'raw-loader',
+    });
+    return config;
+  },
 };
 
 export default nextConfig;

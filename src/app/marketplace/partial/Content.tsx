@@ -3,15 +3,37 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Image from "next/image";
+import { fetchData } from "../../../services/icService";
 
-const Content = () => {
+interface ImageData {
+  src: string;
+  altText?: string;
+  title?: string;
+  price?: number;
+  stock?: number;
+}
+
+const Content: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [imageData, setImageData] = useState<ImageData[]>([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    const loadImageData = async () => {
+      try {
+        const data: ImageData[] = await fetchData();
+        console.log(data, "line 17");
+        setImageData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch image data", error);
+      }
+    };
+
+    loadImageData();
   }, []);
+
+  console.log(imageData[0], "line 27");
+
   return (
     <>
       <div className="flex flex-col md:flex-row gap-4 pt-32 max-w-6xl mx-auto fsac4 md:px-1 px-3 pb-96">
@@ -63,23 +85,23 @@ const Content = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[...Array(9)].map((_, index) => (
+              {imageData.map((image, index) => (
                 <div
                   key={index}
                   className="w-full sm:w-[250px] flex flex-col border border-[#393556]"
                 >
                   <Image
-                    src="https://images.unsplash.com/photo-1644509781412-ca9bcf885f4d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Picture of the author"
+                    src={image}
+                    alt={image.altText || "Image"}
                     width={292}
                     height={304}
                     className="sm:h-max-[300px] h-[300px]"
                   />
                   <div className="p-2 gap-2">
-                    <span>Lonely as always</span>
+                    <span>{image.title || "Untitled"}</span>
                     <div className="flex justify-between w-full">
-                      <small className="text-[#FFD166]">2.00 ETH</small>
-                      <small>in stock : 3</small>
+                      <small className="text-[#FFD166]">{image.price ? `${image.price} ETH` : "N/A"}</small>
+                      <small>in stock: {image.stock ?? "N/A"}</small>
                     </div>
                   </div>
                 </div>
