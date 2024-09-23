@@ -1,10 +1,10 @@
 import { HttpAgent, Actor } from '@dfinity/agent';
-import { idlFactory as backendIdlFactory } from './basic-nft-backend.did.js';
+import { idlFactory as backendIdlFactory } from './plantify.did.js';
 
-const backendCanisterId = 'bw4dl-smaaa-aaaaa-qaacq-cai';
+const backendCanisterId = '2zhk5-gaaaa-aaaag-amewa-cai';
 
 const agent = new HttpAgent({
-  host: "http://localhost:4943",
+  host: "https://icp0.io",
 });
 
 if (process.env.NODE_ENV !== 'production') {
@@ -18,7 +18,7 @@ const backendActor = Actor.createActor(backendIdlFactory, {
 
 export const fetchData = async () => {
   try {
-    const result = await backendActor.icrc7_logo();
+    const result = await backendActor.get_all_paginated_tokens([], []);
     return result;
   } catch (error) {
     console.error('Error fetching data:', error);

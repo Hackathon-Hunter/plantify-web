@@ -22,7 +22,7 @@ export default function Header() {
     };
   }, []);
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: string) => {
     router.push(path);
   };
 

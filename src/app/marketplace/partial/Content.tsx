@@ -20,7 +20,7 @@ const Content: React.FC = () => {
   useEffect(() => {
     const loadImageData = async () => {
       try {
-        const data: ImageData[] = await fetchData();
+        const data: any = await fetchData();
         console.log(data, "line 17");
         setImageData(data);
         setLoading(false);
@@ -85,7 +85,7 @@ const Content: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {imageData.map((image, index) => (
+              {/* {imageData.map((image, index) => (
                 <div
                   key={index}
                   className="w-full sm:w-[250px] flex flex-col border border-[#393556]"
@@ -105,7 +105,7 @@ const Content: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           )}
         </div>
