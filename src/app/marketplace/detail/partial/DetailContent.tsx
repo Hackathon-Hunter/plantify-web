@@ -3,10 +3,11 @@ import Header from "@/components/Header";
 import { BasicButton } from "@/components/Button";
 import Image from "next/image";
 
-const DetailContent = () => {
+const DetailContent = ({dataDetail}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -21,7 +22,7 @@ const DetailContent = () => {
         ) : (
           <div className="w-full md:w-[600px]">
             <Image
-              src="https://images.unsplash.com/photo-1644509781412-ca9bcf885f4d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={dataDetail.images}
               alt="Picture of the author"
               width={350}
               height={320}
@@ -46,21 +47,18 @@ const DetailContent = () => {
             <>
               <div className="flex flex-col gap-3">
                 <span className="text-2xl md:text-[36px] font-bold">
-                  Lonely as always
+                  {dataDetail.names}
                 </span>
                 <small className="text-sm md:text-base">Current Price</small>
                 <div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-6">
                   <span className="text-2xl md:text-4xl font-semibold">
-                    0.27 ETH
+                    {dataDetail.prices} ETH
                   </span>
                   <small className="text-sm md:text-base pb-1">$315.26</small>
                 </div>
                 <span className="text-lg md:text-[28px]">Description</span>
                 <p className="text-sm md:text-base">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Reiciendis nam, iusto magni consectetur, accusamus vitae
-                  nostrum autem libero voluptate corrupti assumenda dignissimos
-                  modi, temporibus dolore eum nisi repudiandae quidem fuga?
+                  {dataDetail.descriptions}
                 </p>
               </div>
               <div className="pt-3">

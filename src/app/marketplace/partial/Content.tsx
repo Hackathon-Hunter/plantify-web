@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Image from "next/image";
 import { fetchData } from "../../../services/icService";
+import { tokens } from "./data"
+import { useRouter } from "next/navigation";
 
 interface ImageData {
   src: string;
@@ -14,8 +16,10 @@ interface ImageData {
 }
 
 const Content: React.FC = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [imageData, setImageData] = useState<ImageData[]>([]);
+  const [dataContent, setDataContent] = useState(tokens);
 
   useEffect(() => {
     const loadImageData = async () => {
@@ -32,7 +36,17 @@ const Content: React.FC = () => {
     loadImageData();
   }, []);
 
-  console.log(imageData[0], "line 27");
+  const handleDetail = (image, name, price, description) => () => {
+    const dataDetail = {
+      images: image,
+      names: name,
+      prices: price,
+      descriptions: description
+    }
+
+    localStorage.setItem("data_detail", JSON.stringify(dataDetail));
+    router.push("/marketplace/detail");
+  }
 
   return (
     <>
@@ -85,27 +99,36 @@ const Content: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* {imageData.map((image, index) => (
-                <div
-                  key={index}
-                  className="w-full sm:w-[250px] flex flex-col border border-[#393556]"
-                >
-                  <Image
-                    src={image}
-                    alt={image.altText || "Image"}
-                    width={292}
-                    height={304}
-                    className="sm:h-max-[300px] h-[300px]"
-                  />
-                  <div className="p-2 gap-2">
-                    <span>{image.title || "Untitled"}</span>
-                    <div className="flex justify-between w-full">
-                      <small className="text-[#FFD166]">{image.price ? `${image.price} ETH` : "N/A"}</small>
-                      <small>in stock: {image.stock ?? "N/A"}</small>
+              {dataContent.map((token, index) => {
+                const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
+                const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+                const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
+                const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
+
+                return (
+                  <div
+                    key={index}
+                    className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
+                    onClick={handleDetail(image, name, price, description)}
+                  >
+                    <Image
+                      src={image}
+                      alt={name}
+                      width={200}
+                      height={200}
+                      className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover"
+                    />
+                    <div className="p-2 gap-2 flex flex-col h-full">
+                      <span className="text-lg font-semibold">{name}</span>
+                      <div className="flex-grow"></div>
+                      <div className="flex justify-between w-full">
+                        <small className="text-[#FFD166]">{price !== "N/A" ? `${price} ETH` : "N/A"}</small>
+                        <small>in stock: N/A</small>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))} */}
+                );
+              })}
             </div>
           )}
         </div>
