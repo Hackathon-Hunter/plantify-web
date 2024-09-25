@@ -1,0 +1,139 @@
+type Account = record { owner : principal; subaccount : opt Subaccount };
+type Account__1 = record { owner : principal; subaccount : opt blob };
+type Account__2 = record { owner : principal; subaccount : opt Subaccount__1 };
+type Account__3 = record { owner : principal; subaccount : opt Subaccount__1 };
+type CandyShared = variant {
+  Int : int;
+  Map : vec record { text; CandyShared };
+  Nat : nat;
+  Set : vec CandyShared;
+  Nat16 : nat16;
+  Nat32 : nat32;
+  Nat64 : nat64;
+  Blob : blob;
+  Bool : bool;
+  Int8 : int8;
+  Ints : vec int;
+  Nat8 : nat8;
+  Nats : vec nat;
+  Text : text;
+  Bytes : blob;
+  Int16 : int16;
+  Int32 : int32;
+  Int64 : int64;
+  Option : opt CandyShared;
+  Floats : vec float64;
+  Float : float64;
+  Principal : principal;
+  Array : vec CandyShared;
+  ValueMap : vec record { CandyShared; CandyShared };
+  Class : vec PropertyShared;
+};
+type NFTInput = variant {
+  Int : int;
+  Map : vec record { text; CandyShared };
+  Nat : nat;
+  Set : vec CandyShared;
+  Nat16 : nat16;
+  Nat32 : nat32;
+  Nat64 : nat64;
+  Blob : blob;
+  Bool : bool;
+  Int8 : int8;
+  Ints : vec int;
+  Nat8 : nat8;
+  Nats : vec nat;
+  Text : text;
+  Bytes : blob;
+  Int16 : int16;
+  Int32 : int32;
+  Int64 : int64;
+  Option : opt CandyShared;
+  Floats : vec float64;
+  Float : float64;
+  Principal : principal;
+  Array : vec CandyShared;
+  ValueMap : vec record { CandyShared; CandyShared };
+  Class : vec PropertyShared;
+};
+type OwnerOfRequest = vec nat;
+type OwnerOfResponse = vec opt Account__1;
+type Plantify = service {
+  get_all_paginated_tokens : (opt nat, opt nat) -> (
+      vec TokenWithMetadata,
+    ) query;
+  icrc7_tokens_of : (Account__3, opt nat, opt nat) -> (
+      vec TokenWithMetadata,
+    ) query;
+  mint : (SetNFTRequest) -> (vec SetNFTResult);
+  tokens_owner : (OwnerOfRequest) -> (OwnerOfResponse) query;
+  transfer_from : (vec TransferFromArg) -> (vec opt TransferFromResult);
+};
+type PropertyShared = record {
+  value : CandyShared;
+  name : text;
+  immutable : bool;
+};
+type SetNFTError = variant {
+  GenericError : record { message : text; error_code : nat };
+  TokenExists;
+  NonExistingTokenId;
+  CreatedInFuture : record { ledger_time : nat64 };
+  TooOld;
+};
+type SetNFTItemRequest = record {
+  token_id : nat;
+  owner : opt Account__2;
+  metadata : NFTInput;
+  memo : opt blob;
+  override : bool;
+  created_at_time : opt nat64;
+};
+type SetNFTRequest = vec SetNFTItemRequest;
+type SetNFTResult = variant {
+  Ok : opt nat;
+  Err : SetNFTError;
+  GenericError : record { message : text; error_code : nat };
+};
+type Subaccount = blob;
+type Subaccount__1 = blob;
+type TokenWithMetadata = record {
+  id : nat;
+  metadata : vec opt vec record { text; Value };
+};
+type TransferFromArg = record {
+  to : Account;
+  spender_subaccount : opt blob;
+  token_id : nat;
+  from : Account;
+  memo : opt blob;
+  created_at_time : opt nat64;
+};
+type TransferFromError = variant {
+  GenericError : record { message : text; error_code : nat };
+  Duplicate : record { duplicate_of : nat };
+  NonExistingTokenId;
+  Unauthorized;
+  CreatedInFuture : record { ledger_time : nat64 };
+  InvalidRecipient;
+  GenericBatchError : record { message : text; error_code : nat };
+  TooOld;
+};
+type TransferFromResult = variant { Ok : nat; Err : TransferFromError };
+type Value = variant {
+  Int : int;
+  Map : vec record { text; Value__1 };
+  Nat : nat;
+  Blob : blob;
+  Text : text;
+  Array : vec Value__1;
+};
+type Value__1 = variant {
+  Int : int;
+  Map : vec record { text; Value__1 };
+  Nat : nat;
+  Blob : blob;
+  Text : text;
+  Array : vec Value__1;
+};
+service : Plantify
