@@ -1,16 +1,43 @@
 import React, { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import { BasicButton } from "@/components/Button";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { fetchData } from "../../../../services/icService.ts";
 
 const ListMoreContent = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [dataContent, setDataContent] = useState([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    const responseData = async () => {
+      try {
+        const data: any = await fetchData();
+        setDataContent(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch image data", error);
+      }
+    };
+
+    responseData();
   }, []);
+
+  const handleDetail = (
+    image: string,
+    name: string,
+    price: string,
+    description: string,
+    location: string,
+    harvestTime: string,
+    harvestProfit: string,
+    sizeArea: string
+  ) => () => {
+    router.push(
+      `/marketplace/detail?image=${encodeURIComponent(image)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&description=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&harvestTime=${encodeURIComponent(harvestTime)}&harvestProfit=${encodeURIComponent(harvestProfit)}&sizeArea=${encodeURIComponent(sizeArea)}`
+    );
+
+  };
+
   return (
     <>
       <div className="h-auto md:h-screen w-full p-5 md:flex-row gap-6 pt-32 max-w-6xl mx-auto px-3 md:px-1">
@@ -41,30 +68,42 @@ const ListMoreContent = () => {
               Description
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-              {[...Array(8)].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-full flex flex-col border border-[#393556] rounded-md overflow-hidden"
-                >
-                  <div className="relative w-full h-[300px]">
-                    <Image
-                      src="https://images.unsplash.com/photo-1644509781412-ca9bcf885f4d?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt="Picture of the author"
-                      layout="fill" // Use layout fill to cover the container
-                      objectFit="cover" // Ensure image covers the container
-                    />
-                  </div>
-                  <div className="p-4">
-                    <span className="text-md font-semibold block mb-1">
-                      Lonely as always
-                    </span>
-                    <div className="flex justify-between text-sm">
-                      <small className="text-[#FFD166]">2.00 ETH</small>
-                      <small>in stock: 3</small>
+              {dataContent.map((token, index) => {
+                const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
+                const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+                const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
+                const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
+                const location = token.metadata[0][0].find(([key]) => key === "location")?.[1]?.Text || "N/A";
+                const harvestTime = token.metadata[0][0].find(([key]) => key === "harvest_date")?.[1]?.Text || "N/A";
+                const harvestProfit = token.metadata[0][0].find(([key]) => key === "harvest_profits")?.[1]?.Nat.toString() || "N/A";
+                const sizeArea = token.metadata[0][0].find(([key]) => key === "size_area")?.[1]?.Nat.toString() || "N/A";
+
+                return (
+                  <div
+                    key={index}
+                    className="w-full flex flex-col border border-[#393556] rounded-md overflow-hidden"
+                    onClick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
+                  >
+                    <div className="relative w-full h-[300px]">
+                      <Image
+                        src={image}
+                        alt={name}
+                        width={200}
+                        height={200}
+                        className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover"
+                      />
+                    </div>
+                    <div className="p-2 gap-2 flex flex-col h-full">
+                      <span className="text-lg font-semibold">{name}</span>
+                      <div className="flex-grow"></div>
+                      <div className="flex flex-col gap-1 w-full">
+                        <small className="text-[#FFD166]">{price !== "N/A" ? `${price} ETH` : "N/A"}</small>
+                        <span>{location}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )}
