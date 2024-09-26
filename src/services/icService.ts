@@ -2,7 +2,7 @@ import { HttpAgent, Actor, ActorSubclass } from '@dfinity/agent';
 import { idlFactory as backendIdlFactory } from './plantify.did.js';
 
 const agent = new HttpAgent({
-  host: "https://icp0.io",
+  host: process.env.NEXT_PUBLIC_HOST,
 });
 
 if (process.env.NODE_ENV !== 'production') {

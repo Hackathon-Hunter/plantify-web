@@ -120,7 +120,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                     <span className="text-2xl md:text-[36px] font-bold">
                       {dataDetail?.names || "Name Not Available"}
                     </span>
-                    <small>{dataDetail?.locations || "Location Not Available" }</small>
+                    <small>{dataDetail?.locations || "Location Not Available"}</small>
                   </div>
                   <button
                     className="inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg"
@@ -134,13 +134,13 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                   <span className="text-2xl md:text-4xl font-semibold">
                     {dataDetail?.prices ? `${dataDetail.prices} ETH` : "Price Not Available"}
                   </span>
-                  <small className="text-sm md:text-base pb-1">$315.26/Take Profit <span className="font-semibold text-green-500">
-                    {dataDetail?.harvestProfits ? (
-                      `$315.26/Take Profit  <span className="font-semibold text-green-500">${dataDetail.harvestProfits} ETH</span>`
-                    ) : (
-                      "Take Profit Not Available"
-                    )}
-                  </span> ETH</small>
+                  <small className="text-sm md:text-base pb-1">$315.26/Take Profit
+                    <span className="font-semibold text-green-500">
+                      {dataDetail?.harvestProfits ? (
+                        `  ${dataDetail.harvestProfits}`
+                      ) : (
+                        "Take Profit Not Available"
+                      )} </span> ETH</small>
                 </div>
                 <span className="text-lg md:text-[28px]">Description</span>
                 <p className="text-sm md:text-base">
