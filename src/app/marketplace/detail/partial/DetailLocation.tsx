@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -30,9 +31,8 @@ const DetailLocation = () => {
                         Location
                     </span>
 
-                    <div className="mt-4"> {/* Tambahkan margin top jika perlu untuk memberikan jarak */}
+                    <div className="mt-4">
                         {loading ? (
-                            // Skeleton loading placeholder
                             <div className="animate-pulse h-64 bg-gray-300 w-full"></div>
                         ) : (
                             <MapContainer center={position} zoom={13} style={{ height: "500px", width: "100%" }}>

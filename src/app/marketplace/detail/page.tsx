@@ -1,26 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
+
 import Header from "@/components/Header";
 import DetailContent from "./partial/DetailContent";
 import DetailLocation from "./partial/DetailLocation";
 import ListMoreContent from "./partial/ListMoreContent";
-import { useSearchParams } from 'next/navigation';
 
 interface DataDetail {
-  images: string | null;
-  names: string | null;
-  prices: string | null;
-  descriptions: string | null;
-  locations: string | null;
-  harvestTimes: string | null;
-  harvestProfits: string | null;
-  sizeAreas: string | null;
+  images?: string;
+  names?: string;
+  prices?: string;
+  descriptions?: string;
+  locations?: string;
+  harvestTimes?: string;
+  harvestProfits?: string;
+  sizeAreas?: string;
 }
 
 export default function Marketplace() {
   const searchParams = useSearchParams();
-  const [dataDetail, setDataDetail] = useState<DataDetail | null>(null);
+  const [dataDetail, setDataDetail] = useState<DataDetail>();
 
 
   useEffect(() => {

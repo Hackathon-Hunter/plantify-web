@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import { BasicButton } from "@/components/Button";
 import Image from "next/image";
 
+
 interface DataDetail {
-  images: string | null;
-  names: string | null;
-  prices: string | null;
-  descriptions: string | null;
-  locations: string | null;
-  harvestTimes: string | null;
-  harvestProfits: string | null;
-  sizeAreas: string | null;
+  images?: string;
+  names?: string;
+  prices?: string;
+  descriptions?: string;
+  locations?: string;
+  harvestTimes?: string;
+  harvestProfits?: string;
+  sizeAreas?: string;
 }
 
 interface DetailContentProps {
-  dataDetail: DataDetail | null; // Pastikan tipe dataDetail sesuai
+  dataDetail?: DataDetail;
 }
 
 const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
@@ -39,7 +38,6 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  // Modal Gagal
   const ModalFailure = ({ closeModal }) => (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
@@ -56,7 +54,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  const handleBuyClick = (params) => {
+  const handleBuyClick = (params: "success" | "fail") => {
     if (params == "success") {
       setShowModalSuccess(true);
     } else {
@@ -88,13 +86,17 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
           </div>
         ) : (
           <div className="w-full md:w-[600px]">
-            <Image
-              src={dataDetail?.images}
-              alt="Picture of the author"
-              width={350}
-              height={320}
-              className="w-full h-auto object-cover rounded-md"
-            />
+            {dataDetail?.images ? (
+              <Image
+                src={dataDetail.images}
+                alt="Picture of the author"
+                width={350}
+                height={320}
+                className="w-full h-auto object-cover rounded-md"
+              />
+            ) : (
+              <div className="bg-gray-300 animate-pulse w-full h-[320px] rounded-md"></div>
+            )}
           </div>
         )}
 
@@ -116,13 +118,13 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-1">
                     <span className="text-2xl md:text-[36px] font-bold">
-                      {dataDetail?.names}
+                      {dataDetail?.names || "Name Not Available"}
                     </span>
-                    <small>{dataDetail?.locations}</small>
+                    <small>{dataDetail?.locations || "Location Not Available" }</small>
                   </div>
                   <button
                     className="inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg"
-                    onClick={() => handleBuyClick("failed")}
+                    onClick={() => handleBuyClick("success")}
                   >
                     BUY
                   </button>
@@ -130,17 +132,22 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                 <small className="text-sm md:text-base">Current Price</small>
                 <div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-6">
                   <span className="text-2xl md:text-4xl font-semibold">
-                    {dataDetail?.prices} ETH
+                    {dataDetail?.prices ? `${dataDetail.prices} ETH` : "Price Not Available"}
                   </span>
-                  <small className="text-sm md:text-base pb-1">$315.26/Take Profit <span className="font-semibold text-green-500">{dataDetail?.harvestProfits}</span> ETH</small>
+                  <small className="text-sm md:text-base pb-1">$315.26/Take Profit <span className="font-semibold text-green-500">
+                    {dataDetail?.harvestProfits ? (
+                      `$315.26/Take Profit  <span className="font-semibold text-green-500">${dataDetail.harvestProfits} ETH</span>`
+                    ) : (
+                      "Take Profit Not Available"
+                    )}
+                  </span> ETH</small>
                 </div>
                 <span className="text-lg md:text-[28px]">Description</span>
                 <p className="text-sm md:text-base">
-                  {dataDetail?.descriptions}
+                  {dataDetail?.descriptions || "Description Not Available"}
                 </p>
-                <span>Size Area : {dataDetail?.sizeAreas}</span>
-                <span>Harvest Date : {dataDetail?.harvestTimes}</span>
-
+                <span>Size Area : {dataDetail?.sizeAreas || "Size Area Not Available"}</span>
+                <span>Harvest Date : {dataDetail?.harvestTimes || "Harvest Date Not Available"}</span>
 
               </div>
             </>

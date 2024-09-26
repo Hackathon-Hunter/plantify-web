@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
 import { fetchData } from "../../../../services/icService.ts";
 
 const ListMoreContent = () => {
@@ -23,14 +24,14 @@ const ListMoreContent = () => {
   }, []);
 
   const handleDetail = (
-    image: string,
-    name: string,
-    price: string,
-    description: string,
-    location: string,
-    harvestTime: string,
-    harvestProfit: string,
-    sizeArea: string
+    image?: string,
+    name?: string,
+    price?: string,
+    description?: string,
+    location?: string,
+    harvestTime?: string,
+    harvestProfit?: string,
+    sizeArea?: string
   ) => () => {
     router.push(
       `/marketplace/detail?image=${encodeURIComponent(image)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&description=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&harvestTime=${encodeURIComponent(harvestTime)}&harvestProfit=${encodeURIComponent(harvestProfit)}&sizeArea=${encodeURIComponent(sizeArea)}`
@@ -85,20 +86,24 @@ const ListMoreContent = () => {
                     onClick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
                   >
                     <div className="relative w-full h-[300px]">
-                      <Image
-                        src={image}
-                        alt={name}
-                        width={200}
-                        height={200}
-                        className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover"
-                      />
+                      {image ? (
+                        <Image
+                          src={image}
+                          alt={name}
+                          width={200}
+                          height={200}
+                          className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover" />
+
+                      ) : (
+                        <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
+                      )}
                     </div>
                     <div className="p-2 gap-2 flex flex-col h-full">
-                      <span className="text-lg font-semibold">{name}</span>
+                      <span className="text-lg font-semibold">{name || "Name Not Available"}</span>
                       <div className="flex-grow"></div>
                       <div className="flex flex-col gap-1 w-full">
-                        <small className="text-[#FFD166]">{price !== "N/A" ? `${price} ETH` : "N/A"}</small>
-                        <span>{location}</span>
+                        <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
+                        <span>{location || "Location Not Available"}</span>
                       </div>
                     </div>
                   </div>
