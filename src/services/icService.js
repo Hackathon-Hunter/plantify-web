@@ -1,7 +1,7 @@
 import { HttpAgent, Actor } from '@dfinity/agent';
 import { idlFactory as backendIdlFactory } from './plantify.did.js';
 
-const backendCanisterId = '2zhk5-gaaaa-aaaag-amewa-cai';
+const backendCanisterId = 'yikut-daaaa-aaaam-qbdaq-cai';
 
 const agent = new HttpAgent({
   host: "https://icp0.io",

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import useWallet from "@/hooks/use-wallet";
+import useWallet from '@/hooks/use-wallet';
 
 export default function PlugWallet() {
   const wallet = useWallet();
@@ -14,7 +14,7 @@ export default function PlugWallet() {
             <h1 className="bg-black px-1 text-3xl font-bold">Plug Wallet</h1>
           </div>
           {wallet.isConnected ? (
-            <div>Balance: {wallet.balance}</div>
+            <div>Balance: </div>
           ) : (
             <button
               className="px-8 py-2 bg-blue-500 rounded-lg"
@@ -24,6 +24,13 @@ export default function PlugWallet() {
             </button>
           )}
         </div>
+
+        <button
+          className="px-8 py-2 bg-blue-500 rounded-lg"
+          onClick={wallet.reqBalance}
+        >
+          reqBalance
+        </button>
 
         {/* Coffee shop */}
       </div>
