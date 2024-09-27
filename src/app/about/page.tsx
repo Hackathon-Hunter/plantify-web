@@ -41,39 +41,48 @@ const About = () => {
                     <div className="flex justify-center items-center">
                         <img
                             className="object-cover object-center rounded-lg shadow-lg"
-                            src="/img/farmer.png" // replace with your image path
+                            src="/img/orange-farmer.png" // replace with your image path
                             alt="Our Mission"
                         />
                     </div>
                 </div>
 
                 {/* Core Values Section */}
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="pt-24 mb-4 font-semibold tracking-tighter text-left text-gray-200 text-5xl">
-                        Core Values
-                    </h2>
-                    <div className="pt-4">
-                        <h3 className="font-semibold text-lg text-white">Transparency</h3>
-                        <p className="pt-2 text-md text-gray-200">
-                            Blockchain ensures transparency in all operations, giving investors confidence in their contributions.
-                        </p>
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 pt-52 items-center">
+                    <div className="flex justify-center items-center">
+                        <img
+                            className="object-cover object-center rounded-lg shadow-lg"
+                            src="/img/farmer.png" // replace with your image path
+                            alt="Our Mission"
+                        />
                     </div>
-                    <div className="pt-4">
-                        <h3 className="font-semibold text-lg text-white">Sustainability</h3>
-                        <p className="pt-2 text-md text-gray-200">
-                            We support environmentally friendly farming methods that are both profitable for investors and sustainable for farmers.
-                        </p>
-                    </div>
-                    <div className="pt-4">
-                        <h3 className="font-semibold text-lg text-white">Innovation</h3>
-                        <p className="pt-2 text-md text-gray-200">
-                            By integrating NFTs and blockchain, we’re driving innovation in the agricultural sector, providing new opportunities for investment and growth.
-                        </p>
+                    <div className="">
+                        <h2 className="mb-4 font-semibold tracking-tighter text-left text-gray-200 text-5xl">
+                            Core Values
+                        </h2>
+                        <div className="pt-4">
+                            <h3 className="font-semibold text-lg text-white">Transparency</h3>
+                            <p className="pt-2 text-md text-gray-200">
+                                Blockchain ensures transparency in all operations, giving investors confidence in their contributions.
+                            </p>
+                        </div>
+                        <div className="pt-4">
+                            <h3 className="font-semibold text-lg text-white">Sustainability</h3>
+                            <p className="pt-2 text-md text-gray-200">
+                                We support environmentally friendly farming methods that are both profitable for investors and sustainable for farmers.
+                            </p>
+                        </div>
+                        <div className="pt-4">
+                            <h3 className="font-semibold text-lg text-white">Innovation</h3>
+                            <p className="pt-2 text-md text-gray-200">
+                                By integrating NFTs and blockchain, we’re driving innovation in the agricultural sector, providing new opportunities for investment and growth.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
                 {/* Key Features Section */}
-                <div className="max-w-7xl mx-auto mb-36">
+                <div className="max-w-7xl mx-auto mb-36 mt-16">
                     <h2 className="pt-24 mb-4 font-semibold tracking-tighter text-center text-gray-200 text-5xl">
                         Meet Our Teams
                     </h2>

@@ -74,7 +74,7 @@ export default function Main() {
                     </h2>
                     <div className="ml-6 text-center">
                         <BasicButton
-                            link="/login"
+                            onclick={() => router.push("/login")}
                             title="SIGN UP"
                             fullWidth={false} />
                     </div>
@@ -115,7 +115,7 @@ export default function Main() {
                     {/* Call to Action */}
                     <div className="text-center pt-12">
                         <BasicButton
-                            link="/marketplace"
+                            onclick={() => router.push("/marketplace")}
                             title="Start Investing"
                             size="large"
                             fullWidth={false}
@@ -153,23 +153,23 @@ export default function Main() {
                             const name = token.metadata[0][0].find(([key]) => key === "name")?.[1];
                             const price = token.metadata[0][0].find(([key]) => key === "price")?.[1];
                             const description = token.metadata[0][0].find(([key]) => key === "description")?.[1];
-                            
+
                             const getValue = (value: string | { Text: string } | { Nat: bigint }): string => {
-                              if (typeof value === "string") {
-                                return value;
-                              } else if ('Text' in value) {
-                                return value.Text;
-                              } else if ('Nat' in value) {
-                                return value.Nat.toString();
-                              }
-                              return "N/A";
+                                if (typeof value === "string") {
+                                    return value;
+                                } else if ('Text' in value) {
+                                    return value.Text;
+                                } else if ('Nat' in value) {
+                                    return value.Nat.toString();
+                                }
+                                return "N/A";
                             };
-                            
+
                             // Access values safely
                             const imageUrl = image ? getValue(image) : "";
                             const itemName = name ? getValue(name) : "Untitled";
                             const itemPrice = price ? getValue(price) : "N/A";
-                            const itemDescription = description ? getValue(description) : "N/A";                            
+                            const itemDescription = description ? getValue(description) : "N/A";
 
                             return (
                                 <div
@@ -210,7 +210,7 @@ export default function Main() {
                                 alt={reviews[currentReviewIndex].name}
                                 width={150}
                                 height={150}
-                                className="rounded-full mx-auto mb-4"
+                                className="w-[150px] h-[150px] rounded-full object-cover object-center mx-auto mb-4"
                             />
                             <h3 className="text-2xl font-bold mb-2">
                                 {reviews[currentReviewIndex].name}
@@ -241,8 +241,8 @@ export default function Main() {
                             <div
                                 key={index}
                                 className={`h-3 w-3 rounded-full mx-1 ${index === currentReviewIndex
-                                        ? "bg-yellow-500"
-                                        : "bg-gray-500"
+                                    ? "bg-yellow-500"
+                                    : "bg-gray-500"
                                     }`}
                             ></div>
                         ))}
