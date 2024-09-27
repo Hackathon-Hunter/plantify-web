@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { BasicButton, SecondaryButton } from "./Button";
 import { fetchData } from "../services/icService";
-import { tokens } from "./../app/marketplace/partial/data"
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { reviews } from "./data"
@@ -16,25 +15,41 @@ interface ImageData {
     stock?: number;
 }
 
+interface DataDetail {
+    images?: string;
+    names?: string;
+    prices?: string;
+    descriptions?: string;
+    locations?: string;
+    harvestTimes?: string;
+    harvestProfits?: string;
+    sizeAreas?: string;
+}
+
 export default function Main() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [imageData, setImageData] = useState<ImageData[]>([]);
-    const [dataContent, setDataContent] = useState(tokens);
+    const [dataContent, setDataContent] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        const loadImageData = async () => {
+        const responseData = async () => {
             try {
                 const data: any = await fetchData();
-                setImageData(data);
+                setDataContent(data);
                 setLoading(false);
             } catch (error) {
                 console.error("Failed to fetch image data", error);
             }
         };
 
-        loadImageData();
+        responseData();
     }, []);
+
+    const filteredContent = dataContent.filter((token) => {
+      const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+      return name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     const handleDetail = (image: string, name: string, price: string, description: string) => () => {
         const dataDetail = {
@@ -148,7 +163,7 @@ export default function Main() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
-                        {dataContent.slice(0, 3).map((token, index) => {
+                        {filteredContent.slice(0, 3).map((token, index) => {
                             const image = token.metadata[0][0].find(([key]) => key === "image")?.[1];
                             const name = token.metadata[0][0].find(([key]) => key === "name")?.[1];
                             const price = token.metadata[0][0].find(([key]) => key === "price")?.[1];
