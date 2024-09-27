@@ -9,7 +9,7 @@ import { fetchData } from "../../../services/icService";
 const Content: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [dataContent, setDataContent] = useState([]);
+  const [dataContent, setDataContent] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Content: React.FC = () => {
     responseData();
   }, []);
 
-  const filteredContent = dataContent.filter((token) => {
+  const filteredContent = dataContent.filter((token: { metadata: any[][][] }) => {
     const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
     return name.toLowerCase().includes(searchTerm.toLowerCase());
   });
@@ -58,14 +58,14 @@ const Content: React.FC = () => {
                 id="search"
                 type="text"
                 placeholder="Search ..."
-                className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="">Location</label>
-              <select className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <select className="px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="" className="text-black">
                   Select Type
                 </option>
@@ -100,7 +100,7 @@ const Content: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredContent.map((token, index) => {
+              {filteredContent.map((token: { metadata: any[][][] }, index: React.Key | null | undefined) => {
                 const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
                 const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
                 const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
