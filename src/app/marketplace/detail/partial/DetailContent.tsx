@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-
 
 interface DataDetail {
   images?: string;
@@ -14,16 +13,21 @@ interface DataDetail {
 }
 
 interface DetailContentProps {
-  dataDetail?: DataDetail;
+  dataDetail: DataDetail | null;
+}
+
+interface ModalProps {
+  closeModal: () => void;
 }
 
 const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
+  console.log("Received dataDetail:", dataDetail);
   const [loading, setLoading] = useState(true);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);
 
-  const ModalSuccess = ({ closeModal }) => (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+  const ModalSuccess: React.FC<ModalProps> = ({ closeModal }) => (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Success</h2>
         <iframe src="https://lottie.host/embed/4fbef5ad-e560-432b-9a27-5c4d69a5ef68/Xe0JrH7dWt.json"></iframe>
@@ -38,7 +42,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  const ModalFailure = ({ closeModal }) => (
+  const ModalFailure: React.FC<ModalProps> = ({ closeModal }) => (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Failed</h2>
@@ -77,6 +81,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     }, 2000);
 
   }, []);
+
   return (
     <>
       <div className="flex flex-col md:flex-row gap-6 pt-32 max-w-6xl mx-auto px-3 md:px-1">

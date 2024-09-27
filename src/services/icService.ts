@@ -24,3 +24,13 @@ export const fetchData = async (): Promise<any> => {
     throw error;
   }
 };
+
+export const fetchDataDetail = async (query: number): Promise<any> => {
+  try {
+    const result = await backendActor.detail_token(BigInt(query));
+    return result;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
