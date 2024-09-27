@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+// import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+// delete L.Icon.Default.prototype._getIconUrl;
+// L.Icon.Default.mergeOptions({
+//     iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+//     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+//     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+// });
 
 const DetailLocation = () => {
     const position = [-7.983908, 112.621391];
@@ -31,7 +31,7 @@ const DetailLocation = () => {
                         Location
                     </span>
 
-                    <div className="mt-4">
+                    {/* <div className="mt-4">
                         {loading ? (
                             <div className="animate-pulse h-64 bg-gray-300 w-full"></div>
                         ) : (
@@ -47,7 +47,7 @@ const DetailLocation = () => {
                                 </Marker>
                             </MapContainer>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

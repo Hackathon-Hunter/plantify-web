@@ -23,20 +23,10 @@ const ListMoreContent = () => {
     responseData();
   }, []);
 
-  const handleDetail = (
-    image?: string,
-    name?: string,
-    price?: string,
-    description?: string,
-    location?: string,
-    harvestTime?: string,
-    harvestProfit?: string,
-    sizeArea?: string
-  ) => () => {
-    router.push(
-      `/marketplace/detail?image=${encodeURIComponent(image)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&description=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&harvestTime=${encodeURIComponent(harvestTime)}&harvestProfit=${encodeURIComponent(harvestProfit)}&sizeArea=${encodeURIComponent(sizeArea)}`
-    );
-
+  const handleDetail = (id?: string) => {
+    return () => {
+      router.push(`/marketplace/detail?id=${id}`);
+    };
   };
 
   return (
@@ -69,21 +59,18 @@ const ListMoreContent = () => {
               Description
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-              {dataContent.map((token, index) => {
+              {dataContent.map((token: { id: string; metadata: any[][][] }, index: React.Key | null | undefined) => {
+                const id = token.id !== undefined && token.id !== null ? token.id.toString() : "N/A";
                 const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
                 const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
                 const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
-                const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
                 const location = token.metadata[0][0].find(([key]) => key === "location")?.[1]?.Text || "N/A";
-                const harvestTime = token.metadata[0][0].find(([key]) => key === "harvest_date")?.[1]?.Text || "N/A";
-                const harvestProfit = token.metadata[0][0].find(([key]) => key === "harvest_profits")?.[1]?.Nat.toString() || "N/A";
-                const sizeArea = token.metadata[0][0].find(([key]) => key === "size_area")?.[1]?.Nat.toString() || "N/A";
 
                 return (
                   <div
                     key={index}
                     className="w-full flex flex-col border border-[#393556] rounded-md overflow-hidden"
-                    onClick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
+                    onClick={handleDetail(id)}
                   >
                     <div className="relative w-full h-[300px]">
                       {image ? (

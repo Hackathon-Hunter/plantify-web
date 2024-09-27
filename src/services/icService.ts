@@ -39,3 +39,12 @@ export const fetchProfileNft = async (): Promise<ReturnType<any['icrc7_tokens_of
     throw error
   }
 }
+export const fetchDataDetail = async (query: number): Promise<any> => {
+  try {
+    const result = await backendActor.detail_token(BigInt(query));
+    return result;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
