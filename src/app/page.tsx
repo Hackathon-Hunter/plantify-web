@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="text-black bg-black">
       <Head>
-        <title>nine4</title>
+        <title>Plantify</title>
         <link rel="icon" href="/favicon.png" />
       </Head>
       <Header />

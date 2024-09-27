@@ -13,10 +13,12 @@
     "@dfinity/candid": "2.1.1",
     "@dfinity/principal": "2.1.1",
     "axios": "1.7.5",
+    "leaflet": "1.9.4",
     "next": "14.2.8",
     "raw-loader": "4.0.2",
     "react": "18",
     "react-dom": "18",
+    "react-leaflet": "4.2.1",
     "yarn": "1.22.22"
   },
   "devDependencies": {
