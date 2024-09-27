@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "@/components/Header";
 import { BasicButton } from "@/components/Button";
 import Image from "next/image";
 
@@ -62,7 +61,7 @@ const DetailContent = ({dataDetail}) => {
                 </p>
               </div>
               <div className="pt-3">
-                <BasicButton onclick={() => {}} title="BUY" fullWidth={false} />
+                <BasicButton onclick={() => {}} title="Sell NFT" fullWidth={false} />
               </div>
             </>
           )}

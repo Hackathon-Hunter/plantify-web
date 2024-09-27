@@ -2,8 +2,10 @@
 
 import { BasicButton } from "@/components/Button";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -22,7 +24,7 @@ const Login = () => {
           className="object-cover w-full h-full"
         />
         <div className="absolute inset-0 flex items-center justify-center text-blue-primary text-1xl font-normal p-52">
-          Access your MetaFarm account to seamlessly invest in real-world farming projects through NFTs. Manage your 
+          Access your MetaFarm account to seamlessly invest in real-world farming projects through NFTs. Manage your
           investments, track harvests, and enjoy the benefits of transparent and profitable agriculture.
         </div>
       </div>
@@ -63,7 +65,7 @@ const Login = () => {
 
             <div>
               <BasicButton
-                link="/"
+                onclick={() => router.push("/")}
                 title="Login"
                 fullWidth={true} />
             </div>
