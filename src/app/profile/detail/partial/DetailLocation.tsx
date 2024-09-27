@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const DetailLocation = () => {
-    const position = [-7.983908, 112.621391];
+    const position: [number, number] = [-7.983908, 112.621391];
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
