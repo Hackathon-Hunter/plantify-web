@@ -9,7 +9,7 @@ import { fetchData } from "../../../services/icService";
 const Content: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [dataContent, setDataContent] = useState([]);
+  const [dataContent, setDataContent] = useState<any>();
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -26,25 +26,17 @@ const Content: React.FC = () => {
     responseData();
   }, []);
 
-  const filteredContent = dataContent.filter((token) => {
-    const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
-    return name.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const filteredContent = Array.isArray(dataContent)
+    ? dataContent.filter((token: { metadata: any[][][] }) => {
+      const name = token.metadata?.[0]?.[0]?.find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+      return name.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+    : [];
 
-  const handleDetail = (
-    image?: string,
-    name?: string,
-    price?: string,
-    description?: string,
-    location?: string,
-    harvestTime?: string,
-    harvestProfit?: string,
-    sizeArea?: string
-  ) => () => {
-    router.push(
-      `/marketplace/detail?image=${encodeURIComponent(image)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&description=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}&harvestTime=${encodeURIComponent(harvestTime)}&harvestProfit=${encodeURIComponent(harvestProfit)}&sizeArea=${encodeURIComponent(sizeArea)}`
-    );
-
+  const handleDetail = (id?: string) => {
+    return () => {
+      router.push(`/marketplace/detail?id=${id}`);
+    };
   };
 
   return (
@@ -58,14 +50,14 @@ const Content: React.FC = () => {
                 id="search"
                 type="text"
                 placeholder="Search ..."
-                className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="">Location</label>
-              <select className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <select className="px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="" className="text-black">
                   Select Type
                 </option>
@@ -100,21 +92,18 @@ const Content: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredContent.map((token, index) => {
+              {filteredContent.map((token: { id: string; metadata: any[][][] }, index: React.Key | null | undefined) => {
+                const id = token.id !== undefined && token.id !== null ? token.id.toString() : "N/A";
                 const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
                 const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
                 const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
-                const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
                 const location = token.metadata[0][0].find(([key]) => key === "location")?.[1]?.Text || "N/A";
-                const harvestTime = token.metadata[0][0].find(([key]) => key === "harvest_date")?.[1]?.Text || "N/A";
-                const harvestProfit = token.metadata[0][0].find(([key]) => key === "harvest_profits")?.[1]?.Nat.toString() || "N/A";
-                const sizeArea = token.metadata[0][0].find(([key]) => key === "size_area")?.[1]?.Nat.toString() || "N/A";
 
                 return (
                   <div
                     key={index}
                     className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
-                    onClick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
+                    onClick={handleDetail(id)}
                   >
                     {image ? (
                       <Image

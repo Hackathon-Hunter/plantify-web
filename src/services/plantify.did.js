@@ -11,6 +11,14 @@ export const idlFactory = ({ IDL }) => {
       'Array' : IDL.Vec(Value__1),
     })
   );
+  const Value__2 = IDL.Variant({
+    'Int' : IDL.Int,
+    'Map' : IDL.Vec(IDL.Tuple(IDL.Text, Value__1)),
+    'Nat' : IDL.Nat,
+    'Blob' : IDL.Vec(IDL.Nat8),
+    'Text' : IDL.Text,
+    'Array' : IDL.Vec(Value__1),
+  });
   const Value = IDL.Variant({
     'Int' : IDL.Int,
     'Map' : IDL.Vec(IDL.Tuple(IDL.Text, Value__1)),
@@ -160,11 +168,17 @@ export const idlFactory = ({ IDL }) => {
     'Err' : TransferFromError,
   });
   const Plantify = IDL.Service({
+    'detail_token' : IDL.Func(
+        [IDL.Nat],
+        [IDL.Vec(IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, Value__2))))],
+        ['query'],
+      ),
     'get_all_paginated_tokens' : IDL.Func(
         [IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat)],
         [IDL.Vec(TokenWithMetadata)],
         ['query'],
       ),
+    'get_state_owner' : IDL.Func([], [IDL.Principal], ['query']),
     'icrc7_tokens_of' : IDL.Func(
         [Account__3, IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat)],
         [IDL.Vec(TokenWithMetadata)],
