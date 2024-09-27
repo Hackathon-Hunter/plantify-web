@@ -21,7 +21,6 @@ interface ModalProps {
 }
 
 const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
-  console.log("Received dataDetail:", dataDetail);
   const [loading, setLoading] = useState(true);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);

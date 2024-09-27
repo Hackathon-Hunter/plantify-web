@@ -55,7 +55,7 @@ export default function Marketplace() {
     const idParams = searchParams.get("id");
     const numericId = idParams ? parseInt(idParams) : null;
 
-    if (numericId) {
+    if (numericId !== null) {
       setLoading(true);
       fetchDetailData(numericId);
     } else {
