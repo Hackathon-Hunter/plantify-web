@@ -57,7 +57,7 @@ export default function Header() {
             Marketplace
           </a>
           <BasicButton
-            link="/login"
+            onclick={() => router.push("/login")}
             title="Login"
             size="small"
             fullWidth={false} />
