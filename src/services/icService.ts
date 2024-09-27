@@ -1,5 +1,6 @@
 import { HttpAgent, Actor, ActorSubclass } from '@dfinity/agent';
 import { idlFactory as backendIdlFactory } from './plantify.did.js';
+import { Principal } from '@dfinity/principal';
 
 const agent = new HttpAgent({
   host: process.env.NEXT_PUBLIC_HOST,
@@ -23,3 +24,18 @@ export const fetchData = async (): Promise<ReturnType<_SERVICE['get_all_paginate
     throw error;
   }
 };
+
+const account = {
+  owner: Principal.fromText('yikut-daaaa-aaaam-qbdaq-cai'),
+  subaccount: [], // or provide a subaccount if you have one
+};
+
+export const fetchProfileNft = async (): Promise<ReturnType<any['icrc7_tokens_of']>> => {
+  try {
+    const result = await backendActor.icrc7_tokens_of(account, [], [])
+    console.log("abjjg",result);
+    return result
+  } catch (error) {
+    throw error
+  }
+}

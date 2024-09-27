@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BasicButton } from "@/components/Button";
+import { fetchProfileNft } from "../../services/icService";
 
 export default function Profile() {
   const router = useRouter();
-
+  const [dataContent, setDataContent] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleDetail = (image: any, name: any, price: any, description: any) => () => {
     const dataDetail = {
@@ -22,6 +24,21 @@ export default function Profile() {
     localStorage.setItem("data_detail", JSON.stringify(dataDetail));
     router.push("./profile/detail");
   }
+
+  useEffect(() => {
+    const responseData = async () => {
+      try {
+        const data: any = await fetchProfileNft();
+        setDataContent(data);
+        setLoading(false);
+        console.log('dataaaaaa', data)
+      } catch (error) {
+        console.error("Failed to fetch image data", error);
+      }
+    };
+
+    responseData();
+  }, []);
 
   return (
     <div>
