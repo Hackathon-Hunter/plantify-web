@@ -1,7 +1,6 @@
 import { HttpAgent, Actor, ActorSubclass } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal'
 import { idlFactory as backendIdlFactory } from './plantify.did.js';
-import { Principal } from '@dfinity/principal';
 
 const agent = new HttpAgent({
   host: process.env.NEXT_PUBLIC_HOST,

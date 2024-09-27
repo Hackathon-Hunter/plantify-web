@@ -21,13 +21,16 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
   const [loading, setLoading] = useState(true);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);
+  const currentDate = new Date();
+  const [day, month, year] = dataDetail?.harvestTimes?.split('-') ?? [];
+  const harvestDate = new Date(`${year}-${month}-${day}`);
 
-  const ModalSuccess = ({ closeModal }) => (
+  const ModalSuccess = ({ closeModal }: any) => (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Success</h2>
         <iframe src="https://lottie.host/embed/4fbef5ad-e560-432b-9a27-5c4d69a5ef68/Xe0JrH7dWt.json"></iframe>
-        <p>Your purchase was successful!</p>
+        <p>Your claim profit successful!</p>
         <button
           className="mt-4 bg-green-500 text-white py-2 px-4 rounded"
           onClick={closeModal}
@@ -38,7 +41,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  const ModalFailure = ({ closeModal }) => (
+  const ModalFailure = ({ closeModal }: any) => (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Failed</h2>
@@ -122,12 +125,12 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                     </span>
                     <small>{dataDetail?.locations || "Location Not Available"}</small>
                   </div>
-                  <button
-                    className="inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg"
-                    onClick={() => handleBuyClick("success")}
-                  >
-                    SELL NFT
-                  </button>
+                  <BasicButton
+                    onclick={() => handleBuyClick("success")}
+                    title="CLAIM PROFIT"
+                    fullWidth={false}
+                    isDisable={currentDate > harvestDate ? false : true}
+                  />
                 </div>
                 <small className="text-sm md:text-base">Current Price</small>
                 <div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-6">

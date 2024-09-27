@@ -58,7 +58,7 @@ export default function Header() {
           </a>
           <BasicButton
             onclick={() => router.push("/login")}
-            title="Login"
+            title="Connect Wallet"
             size="small"
             fullWidth={false} />
         </nav>
