@@ -25,6 +25,20 @@ export const fetchData = async (): Promise<any> => {
   }
 };
 
+const account = {
+  owner: Principal.fromText('yikut-daaaa-aaaam-qbdaq-cai'),
+  subaccount: [], // or provide a subaccount if you have one
+};
+
+export const fetchProfileNft = async (): Promise<ReturnType<any['icrc7_tokens_of']>> => {
+  try {
+    const result = await backendActor.icrc7_tokens_of(account, [], [])
+    console.log("abjjg",result);
+    return result
+  } catch (error) {
+    throw error
+  }
+}
 export const fetchDataDetail = async (query: number): Promise<any> => {
   try {
     const result = await backendActor.detail_token(BigInt(query));

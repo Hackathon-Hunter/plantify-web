@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import '../../../../styles/leafletStyles.css';
 import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -12,7 +12,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const DetailLocation = () => {
-    const position = [-7.983908, 112.621391];
+    const position: [number, number] = [-7.983908, 112.621391];
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

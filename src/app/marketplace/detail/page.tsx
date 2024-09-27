@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
 
 import { fetchDataDetail } from "../../../services/icService";
 
 import Header from "@/components/Header";
 import DetailContent from "./partial/DetailContent";
-import DetailLocation from "./partial/DetailLocation";
+// import DetailLocation from "./partial/DetailLocation";
 import ListMoreContent from "./partial/ListMoreContent";
 
 interface DataDetail {
@@ -22,7 +22,7 @@ interface DataDetail {
 }
 
 
-export default function Marketplace() {
+function Marketplace() {
   const searchParams = useSearchParams();
   const [dataDetail, setDataDetail] = useState<DataDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,15 @@ export default function Marketplace() {
       <Header />
       <DetailContent dataDetail={dataDetail} />
       {/* <DetailLocation /> */}
-      <ListMoreContent  />
+      <ListMoreContent />
     </div>
   );
+}
+
+export default function MarketplaceSuspend() {
+  return (
+    <Suspense>
+      <Marketplace />
+    </Suspense>
+  )
 }
