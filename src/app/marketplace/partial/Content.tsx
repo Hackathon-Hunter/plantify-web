@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import { fetchData } from "../../../services/icService.ts";
+import { fetchData } from "../../../services/icService";
 
 const Content: React.FC = () => {
   const router = useRouter();
