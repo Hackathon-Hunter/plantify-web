@@ -6,9 +6,9 @@ import '../../../../styles/leafletStyles.css';
 import dynamic from "next/dynamic";
 
 // Disable SSR for the whole DetailLocation component
-const DetailLocation = dynamic(() => Promise.resolve(() => {
+const DetailLocation = dynamic(() => Promise.resolve(({lat, long}: {lat?: number, long?: number}) => {
     const [loading, setLoading] = useState(true);
-    const position: [number, number] = [-7.983908, 112.621391];
+    const position: [number, number] = [lat || -7.983908, long || 112.621391];
 
     useEffect(() => {
         const timer = setTimeout(() => {

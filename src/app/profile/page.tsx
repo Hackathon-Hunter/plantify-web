@@ -126,11 +126,11 @@ export default function Profile() {
                     )?.[1]?.Text || 'N/A';
                   const harvestTime =
                     token.metadata[0][0].find(
-                      ([key]) => key === 'harvest_date'
+                      ([key]) => key === 'harvest_time'
                     )?.[1]?.Text || 'N/A';
                   const harvestProfit =
                     token.metadata[0][0]
-                      .find(([key]) => key === 'harvest_profits')?.[1]
+                      .find(([key]) => key === 'harvest_profit')?.[1]
                       ?.Nat.toString() || 'N/A';
                   const sizeArea =
                     token.metadata[0][0]

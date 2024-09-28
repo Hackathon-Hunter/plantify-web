@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { fetchData } from "../../../../services/icService";
+import { BasicButton } from "@/components/Button"
 
 const ListMoreContent = () => {
   const router = useRouter();
@@ -69,32 +70,41 @@ const ListMoreContent = () => {
                 return (
                   <div
                     key={index}
-                    className="w-full flex flex-col border border-[#393556] rounded-md overflow-hidden"
+                    className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
                     onClick={handleDetail(id)}
                   >
-                    <div className="relative w-full h-[300px]">
-                      {image ? (
-                        <Image
-                          src={image}
-                          alt={name}
-                          width={200}
-                          height={200}
-                          className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover" />
-
-                      ) : (
-                        <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
-                      )}
-                    </div>
+                    {image ? (
+                      <Image
+                        src={image}
+                        alt={name}
+                        width={200}
+                        height={200}
+                        className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover"
+                      />
+                    ) : (
+                      <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
+                    )}
                     <div className="p-2 gap-2 flex flex-col h-full">
-                      <span className="text-lg font-semibold">{name || "Name Not Available"}</span>
+                      <span className="text-lg font-semibold text-white">
+                        {name || 'Name Not Available'}
+                      </span>
                       <div className="flex-grow"></div>
                       <div className="flex flex-col gap-1 w-full">
-                        <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
-                        <span>{location || "Location Not Available"}</span>
+                        <small className="text-[#FFD166]">
+                          {price !== 'Price Not Available'
+                            ? `${price / 10000000} ICP`
+                            : 'Price Not Available'}
+                        </small>
+                        <span className='text-white'>{location || 'Location Not Available'}</span>
                       </div>
+                      <BasicButton
+                        onclick={handleDetail(id)}
+                        title="Detail"
+                        fullWidth={true}
+                      />
                     </div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>

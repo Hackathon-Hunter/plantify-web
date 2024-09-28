@@ -8,6 +8,6 @@ export type NFTData = {
   harvestProfits?: number;
   sizeAreas?: number;
   lat?: number;
-  lng?: number;
+  long?: number;
   isClaimed?: boolean;
 };
