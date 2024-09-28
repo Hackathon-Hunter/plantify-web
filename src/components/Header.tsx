@@ -30,7 +30,6 @@ export default function Header() {
       };
     }
   }, []);
-  console.log(wallet.walletLoading, 'lin e32')
 
   const handleNavigation = (path: string) => {
     router.push(path);
