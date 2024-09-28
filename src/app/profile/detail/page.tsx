@@ -29,9 +29,13 @@ function Marketplace() {
         descriptions:
           data[0][0].find(([key]: [string, any]) => key === 'description')?.[1]
             ?.Text || 'Untitled',
-        prices:
-          data[0][0].find(([key]: [string, any]) => key === 'price')?.[1]
-            ?.Nat || 0,
+        prices: data[0][0].find(([key]: [string, any]) => key === 'price')?.[1]
+          ?.Nat
+          ? Number(
+            data[0][0].find(([key]: [string, any]) => key === 'price')?.[1]
+              ?.Nat
+          )
+          : 0,
         locations:
           data[0][0].find(([key]: [string, any]) => key === 'location')?.[1]
             ?.Text || 0,
@@ -42,20 +46,38 @@ function Marketplace() {
           data[0][0].find(
             ([key]: [string, any]) => key === 'harvest_profit'
           )?.[1]?.Nat || 0,
-        sizeAreas:
-          data[0][0].find(([key]: [string, any]) => key === 'size_area')?.[1]
-            ?.Nat || 0,
-        isClaimed: data[0][0].find(([key]: [string, any]) => key === 'is_claimed')?.[1]?.Blob[0] == 1 ? true : false
+        sizeAreas: data[0][0].find(
+          ([key]: [string, any]) => key === 'size_area'
+        )?.[1]?.Nat
+          ? Number(
+            data[0][0].find(
+              ([key]: [string, any]) => key === 'size_area'
+            )?.[1]?.Nat
+          )
+          : 0,
+        isClaimed: data[0][0].find(([key]: [string, any]) => key === 'is_claimed')?.[1]?.Blob[0] == 1 ? true : false,
+        lat: data[0][0].find(([key]: [string, any]) => key === 'lat')?.[1]?.Nat
+          ? Number(
+            data[0][0].find(([key]: [string, any]) => key === 'lat')?.[1]?.Nat
+          )
+          : 0,
+        long: data[0][0].find(([key]: [string, any]) => key === 'long')?.[1]
+          ?.Nat
+          ? Number(
+            data[0][0].find(([key]: [string, any]) => key === 'long')?.[1]
+              ?.Nat
+          )
+          : 0
       };
-      
-      setDataDetail(formattedData);      
+
+      setDataDetail(formattedData);
     } catch (error) {
       console.error('Failed to fetch image data', error);
       setDataDetail(null);
     } finally {
       setLoading(false);
     }
-  },[])
+  }, [])
 
   const wallet = useWallet();
 
@@ -93,7 +115,7 @@ function Marketplace() {
       {!loading && tokenId && (
         <DetailContent dataDetail={dataDetail} sendClaimedItem={sendClaimedItem} />
       )}
-      <DetailLocation />
+      <DetailLocation lat={dataDetail?.lat} long={dataDetail?.long} />
     </div>
   );
 }

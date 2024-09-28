@@ -70,6 +70,15 @@ export default function Header() {
           >
             Marketplace
           </a>
+          {wallet.isConnected &&
+            <a
+              className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+              onClick={() => handleNavigation("/profile")}
+            >
+              Profile
+            </a>
+          }
+
           <BasicButton
             onclick={wallet.connect}
             title={wallet.isConnected ? "Wallet Connected" : "Connect Wallet"}
