@@ -149,7 +149,10 @@ const DetailContent: React.FC<DetailContentProps> = ({
                 </p>
                 <span>
                   Size Area :{' '}
-                  {dataDetail?.sizeAreas || 'Size Area Not Available'}
+                  {dataDetail?.sizeAreas
+                    ? dataDetail?.sizeAreas / 10
+                    : 'Size Area Not Available'}{' '}
+                  Hecatare
                 </span>
                 <span>
                   Harvest Date :{' '}

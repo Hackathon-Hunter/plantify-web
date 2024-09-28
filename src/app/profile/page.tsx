@@ -9,12 +9,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BasicButton } from "@/components/Button";
 import { fetchProfileNft } from "../../services/icService";
+import useWallet from '@/hooks/use-wallet';
 
 export default function Profile() {
   const router = useRouter();
   const [dataContent, setDataContent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const wallet = useWallet()
 
   const handleDetail = (id?: string) => {
     return () => {
@@ -61,24 +63,10 @@ export default function Profile() {
 
       <div className="max-w-6xl mx-auto px-5 py-10">
         {/* Profile Section - Side by Side */}
-        <div className="relative flex items-center gap-5 -mt-16">
-          {/* Profile Image */}
-          <Image
-            src="/img/teams/nashir.png"
-            alt="profile"
-            height={100}
-            width={100}
-            className="rounded-full h-[100px] w-[100px] object-cover border-4 border-white"
-          />
 
-          {/* Name and Email - Side by Side */}
-          <div className="flex flex-col">
-            <span className="text-[24px] font-bold">John Doe</span>
-            <span className="text-[16px] text-slate-500">
-              johndoe@gmail.com
-            </span>
-          </div>
-        </div>
+        <span className="text-[24px] text-white">
+          Profile Page
+        </span>
 
         {/* NFT Purchased Grid */}
         <div className="h-auto md:h-screen w-full p-5">
