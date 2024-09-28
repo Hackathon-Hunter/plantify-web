@@ -108,8 +108,9 @@ export default function useWallet(): IUseWallet {
 
   useEffect(() => {
     verifyConnection();
-    getPrincipal()
-  }, []);
+
+    if(isConnected) getPrincipal()
+  }, [isConnected]);
 
   return {
     balance: balance,
