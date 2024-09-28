@@ -1,19 +1,14 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-// import L from 'leaflet';
+import '../../../../styles/leafletStyles.css';
+import dynamic from "next/dynamic";
 
-// delete L.Icon.Default.prototype._getIconUrl;
-// L.Icon.Default.mergeOptions({
-//     iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-//     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-//     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-// });
-
-const DetailLocation = () => {
-    const position = [-7.983908, 112.621391];
+// Disable SSR for the whole DetailLocation component
+const DetailLocation = dynamic(() => Promise.resolve(() => {
     const [loading, setLoading] = useState(true);
+    const position: [number, number] = [-7.983908, 112.621391];
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -23,6 +18,23 @@ const DetailLocation = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    // Only run Leaflet-related code on the client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const L = require('leaflet');
+            L.Icon.Default.mergeOptions({
+                iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+            });
+        }
+    }, []);
+
+    const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+    const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+    const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+    const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
+
     return (
         <div>
             <div className="flex flex-col md:flex-row gap-6 pt-10 max-w-6xl mx-auto px-3 md:px-1">
@@ -31,7 +43,7 @@ const DetailLocation = () => {
                         Location
                     </span>
 
-                    {/* <div className="mt-4">
+                    <div className="mt-4">
                         {loading ? (
                             <div className="animate-pulse h-64 bg-gray-300 w-full"></div>
                         ) : (
@@ -47,11 +59,11 @@ const DetailLocation = () => {
                                 </Marker>
                             </MapContainer>
                         )}
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>
-    )
-};
+    );
+}), { ssr: false });
 
 export default DetailLocation;

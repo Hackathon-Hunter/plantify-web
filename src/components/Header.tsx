@@ -9,18 +9,20 @@ export default function Header() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        if (window.scrollY > 50) {
+          setIsScrolled(true);
+        } else {
+          setIsScrolled(false);
+        }
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+  }
   }, []);
 
   const handleNavigation = (path: string) => {
@@ -58,7 +60,7 @@ export default function Header() {
           </a>
           <BasicButton
             onclick={() => router.push("/login")}
-            title="Login"
+            title="Connect Wallet"
             size="small"
             fullWidth={false} />
         </nav>
