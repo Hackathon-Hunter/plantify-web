@@ -3,7 +3,7 @@ import { Principal } from '@dfinity/principal'
 import { idlFactory as backendIdlFactory } from './plantify.did.js';
 
 const agent = new HttpAgent({
-  host: process.env.NEXT_PUBLIC_HOST,
+  host: "https://icp0.io",
 });
 
 if (process.env.NODE_ENV !== 'production') {
@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const backendActor: ActorSubclass<any> = Actor.createActor<any>(backendIdlFactory, {
   agent,
-  canisterId: process.env.NEXT_PUBLIC_BACKEND_CANISTER_ID as unknown as Principal,
+  canisterId: 'yikut-daaaa-aaaam-qbdaq-cai',
 });
 
 export const fetchData = async (): Promise<any> => {

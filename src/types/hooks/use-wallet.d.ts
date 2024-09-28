@@ -3,4 +3,6 @@ export interface IUseWallet {
   isConnected: boolean;
   connect: () => void;
   reqBalance: () => void;
+  actor: any,
+  transfer: () => void
 }

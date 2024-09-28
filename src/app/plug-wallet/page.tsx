@@ -32,6 +32,13 @@ export default function PlugWallet() {
           reqBalance
         </button>
 
+        <button
+          className="px-8 py-2 bg-blue-500 rounded-lg"
+          onClick={wallet.transfer}
+        >
+          transfer
+        </button>
+
         {/* Coffee shop */}
       </div>
     </div>

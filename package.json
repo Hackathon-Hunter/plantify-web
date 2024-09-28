@@ -11,7 +11,10 @@
   "dependencies": {
     "@dfinity/agent": "2.1.1",
     "@dfinity/candid": "2.1.1",
+    "@dfinity/ledger-icp": "2.5.0",
+    "@dfinity/nns": "^6.0.0",
     "@dfinity/principal": "2.1.1",
+    "@dfinity/utils": "^2.5.0",
     "axios": "1.7.5",
     "leaflet": "1.9.4",
     "next": "14.2.8",
