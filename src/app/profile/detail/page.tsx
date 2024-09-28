@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 
 import Header from "@/components/Header";
 import DetailContent from "./partial/DetailContent";
-// import DetailLocation from "./partial/DetailLocation";
+import DetailLocation from "./partial/DetailLocation";
 
 interface DataDetail {
   images: string | undefined;
@@ -41,7 +41,7 @@ function Marketplace() {
       <div>
         <Header />
         <DetailContent dataDetail={dataDetail} />
-        {/* <DetailLocation /> */}
+        <DetailLocation />
       </div>
   );
 }
