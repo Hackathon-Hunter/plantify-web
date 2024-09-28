@@ -159,23 +159,22 @@ export default function Profile() {
                       ) : (
                         <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
                       )}
-                      <div className="flex flex-col mt-3 w-full">
-                        {/* NFT Title */}
-                        <span className="text-md font-semibold mb-1">
-                          {name || 'Name Not Available'}
-                        </span>
-                        {/* NFT Price */}
-                        <small className="text-[#FFD166] mb-3">
-                          {price !== 'Price Not Available'
-                            ? `${price} ETH`
-                            : 'Price Not Available'}
-                        </small>
-                        {/* Detail Button */}
-                        <BasicButton
-                          onclick={handleDetail(id)}
-                          title="Detail"
-                          fullWidth={true}
-                        />
+                      <div className="p-2 gap-2 flex flex-col h-full">
+                        <span className="text-lg font-semibold">{name || "Name Not Available"}</span>
+                        <div className="flex-grow"></div>
+                        <div className="flex flex-col gap-1 w-full">
+                          <small className="text-[#FFD166]">
+                            {price !== 'Price Not Available'
+                              ? `${price / 10000000} ICP`
+                              : 'Price Not Available'}
+                          </small>
+                          <span>{location || "Location Not Available"}</span>
+                          <BasicButton
+                            onclick={handleDetail(id)}
+                            title="Detail"
+                            fullWidth={true}
+                          />
+                        </div>
                       </div>
                     </div>
                   );
