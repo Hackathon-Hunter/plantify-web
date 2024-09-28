@@ -7,7 +7,7 @@ import { fetchDataDetail } from "../../../services/icService";
 
 import Header from "@/components/Header";
 import DetailContent from "./partial/DetailContent";
-// import DetailLocation from "./partial/DetailLocation";
+import DetailLocation from "./partial/DetailLocation";
 import ListMoreContent from "./partial/ListMoreContent";
 
 interface DataDetail {
@@ -68,7 +68,7 @@ function Marketplace() {
     <div>
       <Header />
       <DetailContent dataDetail={dataDetail} />
-      {/* <DetailLocation /> */}
+      <DetailLocation />
       <ListMoreContent />
     </div>
   );

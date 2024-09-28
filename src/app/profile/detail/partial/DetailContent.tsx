@@ -1,72 +1,70 @@
-import React, { useState, useEffect } from "react";
-import { BasicButton } from "@/components/Button";
-import Image from "next/image";
-
-interface DataDetail {
-  images?: string;
-  names?: string;
-  prices?: string;
-  descriptions?: string;
-  locations?: string;
-  harvestTimes?: string;
-  harvestProfits?: string;
-  sizeAreas?: string;
-}
+import React, { useState, useEffect } from 'react';
+import { BasicButton } from '@/components/Button';
+import Image from 'next/image';
+import { NFTData } from '@/types';
+import { claimProfit } from '@/services/icService';
+import useWallet from '@/hooks/use-wallet';
 
 interface DetailContentProps {
-  dataDetail?: DataDetail;
+  dataDetail: NFTData | null;
+  sendClaimedItem: () => Promise<boolean>
+}
+interface ModalProps {
+  closeModal: () => void;
 }
 
-const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
+const ModalSuccess = ({ closeModal }: ModalProps) => (
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <h2 className="text-2xl font-bold mb-4">Success</h2>
+      <iframe src="https://lottie.host/embed/4fbef5ad-e560-432b-9a27-5c4d69a5ef68/Xe0JrH7dWt.json"></iframe>
+      <p>Your claim request has been successfully sent</p>
+      <button
+        className="mt-4 bg-green-500 text-white py-2 px-4 rounded"
+        onClick={closeModal}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+);
+
+const ModalFailure = ({ closeModal }: ModalProps) => (
+  <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <h2 className="text-2xl font-bold mb-4">Failed</h2>
+      <iframe src="https://lottie.host/embed/88bdeed6-7fc5-4a23-9437-61bbd68088d7/xjBVU3dE5M.json"></iframe>
+      <p>Your claim request failed to send</p>
+      <button
+        className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
+        onClick={closeModal}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+);
+
+const DetailContent: React.FC<DetailContentProps> = ({
+  dataDetail,
+  sendClaimedItem
+}) => {
   const [loading, setLoading] = useState(true);
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);
+
   const currentDate = new Date();
   const [day, month, year] = dataDetail?.harvestTimes?.split('-') ?? [];
   const harvestDate = new Date(`${year}-${month}-${day}`);
 
-  const ModalSuccess = ({ closeModal }: any) => (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">Success</h2>
-        <iframe src="https://lottie.host/embed/4fbef5ad-e560-432b-9a27-5c4d69a5ef68/Xe0JrH7dWt.json"></iframe>
-        <p>Your claim profit successful!</p>
-        <button
-          className="mt-4 bg-green-500 text-white py-2 px-4 rounded"
-          onClick={closeModal}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
+  const handleClaimClick = async () => {
+    const res = await sendClaimedItem();
 
-  const ModalFailure = ({ closeModal }: any) => (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">Failed</h2>
-        <iframe src="https://lottie.host/embed/88bdeed6-7fc5-4a23-9437-61bbd68088d7/xjBVU3dE5M.json"></iframe>
-        <p>Your purchase has failed. Please try again.</p>
-        <button
-          className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-          onClick={closeModal}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  );
-
-  const handleBuyClick = (params: "success" | "fail") => {
-    if (params == "success") {
+    if (res) {
       setShowModalSuccess(true);
     } else {
       setShowModalFailure(true);
     }
-
-    setTimeout(() => {
-      closeModal();
-    }, 3000);
   };
 
   const closeModal = () => {
@@ -78,7 +76,6 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     setTimeout(() => {
       setLoading(false);
     }, 2000);
-
   }, []);
   return (
     <>
@@ -121,30 +118,43 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-1">
                     <span className="text-2xl md:text-[36px] font-bold">
-                      {dataDetail?.names || "Name Not Available"}
+                      {dataDetail?.names || 'Name Not Available'}
                     </span>
-                    <small>{dataDetail?.locations || "Location Not Available"}</small>
+                    <small>
+                      {dataDetail?.locations || 'Location Not Available'}
+                    </small>
                   </div>
                   <BasicButton
-                    onclick={() => handleBuyClick("success")}
-                    title="CLAIM PROFIT"
+                    onclick={handleClaimClick}
+                    title={dataDetail?.isClaimed ? "PROFIT CLAIM REQUEST SENT HAS BEEN SENT" : "CLAIM PROFIT"}
                     fullWidth={false}
-                    isDisable={currentDate > harvestDate ? false : true}
+                    isDisable={
+                      currentDate > harvestDate && !dataDetail?.isClaimed
+                        ? false
+                        : true
+                    }
                   />
                 </div>
                 <small className="text-sm md:text-base">Current Price</small>
                 <div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-6">
                   <span className="text-2xl md:text-4xl font-semibold">
-                    {dataDetail?.prices ? `${dataDetail.prices} ETH` : "Price Not Available"}
+                    {dataDetail?.prices
+                      ? `${dataDetail.prices} ETH`
+                      : 'Price Not Available'}
                   </span>
                 </div>
                 <span className="text-lg md:text-[28px]">Description</span>
                 <p className="text-sm md:text-base">
-                  {dataDetail?.descriptions || "Description Not Available"}
+                  {dataDetail?.descriptions || 'Description Not Available'}
                 </p>
-                <span>Size Area : {dataDetail?.sizeAreas || "Size Area Not Available"}</span>
-                <span>Harvest Date : {dataDetail?.harvestTimes || "Harvest Date Not Available"}</span>
-
+                <span>
+                  Size Area :{' '}
+                  {dataDetail?.sizeAreas || 'Size Area Not Available'}
+                </span>
+                <span>
+                  Harvest Date :{' '}
+                  {dataDetail?.harvestTimes || 'Harvest Date Not Available'}
+                </span>
               </div>
             </>
           )}
