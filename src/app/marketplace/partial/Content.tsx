@@ -1,38 +1,43 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Header from "@/components/Header";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+
 import { fetchData } from "../../../services/icService";
 
-interface ImageData {
-  src: string;
-  altText?: string;
-  title?: string;
-  price?: number;
-  stock?: number;
-}
-
 const Content: React.FC = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [imageData, setImageData] = useState<ImageData[]>([]);
+  const [dataContent, setDataContent] = useState<any>();
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const loadImageData = async () => {
+    const responseData = async () => {
       try {
         const data: any = await fetchData();
-        console.log(data, "line 17");
-        setImageData(data);
+        setDataContent(data);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch image data", error);
       }
     };
 
-    loadImageData();
+    responseData();
   }, []);
 
-  console.log(imageData[0], "line 27");
+  const filteredContent = Array.isArray(dataContent)
+    ? dataContent.filter((token: { metadata: any[][][] }) => {
+      const name = token.metadata?.[0]?.[0]?.find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+      return name.toLowerCase().includes(searchTerm.toLowerCase());
+    })
+    : [];
+
+  const handleDetail = (id?: string) => {
+    return () => {
+      router.push(`/marketplace/detail?id=${id}`);
+    };
+  };
 
   return (
     <>
@@ -45,12 +50,14 @@ const Content: React.FC = () => {
                 id="search"
                 type="text"
                 placeholder="Search ..."
-                className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="">Search</label>
-              <select className="w-full px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <label htmlFor="">Location</label>
+              <select className="px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="" className="text-black">
                   Select Type
                 </option>
@@ -85,27 +92,41 @@ const Content: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* {imageData.map((image, index) => (
-                <div
-                  key={index}
-                  className="w-full sm:w-[250px] flex flex-col border border-[#393556]"
-                >
-                  <Image
-                    src={image}
-                    alt={image.altText || "Image"}
-                    width={292}
-                    height={304}
-                    className="sm:h-max-[300px] h-[300px]"
-                  />
-                  <div className="p-2 gap-2">
-                    <span>{image.title || "Untitled"}</span>
-                    <div className="flex justify-between w-full">
-                      <small className="text-[#FFD166]">{image.price ? `${image.price} ETH` : "N/A"}</small>
-                      <small>in stock: {image.stock ?? "N/A"}</small>
+              {filteredContent.map((token: { id: string; metadata: any[][][] }, index: React.Key | null | undefined) => {
+                const id = token.id !== undefined && token.id !== null ? token.id.toString() : "N/A";
+                const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
+                const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+                const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
+                const location = token.metadata[0][0].find(([key]) => key === "location")?.[1]?.Text || "N/A";
+
+                return (
+                  <div
+                    key={index}
+                    className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
+                    onClick={handleDetail(id)}
+                  >
+                    {image ? (
+                      <Image
+                        src={image}
+                        alt={name}
+                        width={200}
+                        height={200}
+                        className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover" />
+
+                    ) : (
+                      <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
+                    )}
+                    <div className="p-2 gap-2 flex flex-col h-full">
+                      <span className="text-lg font-semibold">{name || "Name Not Available"}</span>
+                      <div className="flex-grow"></div>
+                      <div className="flex flex-col gap-1 w-full">
+                        <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
+                        <span>{location || "Location Not Available"}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))} */}
+                );
+              })}
             </div>
           )}
         </div>

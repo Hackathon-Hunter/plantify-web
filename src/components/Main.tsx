@@ -1,7 +1,82 @@
-import { BasicButton, SecondaryButton } from "./Button";
+"use client";
 
+import React, { useState, useEffect } from "react";
+import { BasicButton, SecondaryButton } from "./Button";
+import { fetchData } from "../services/icService";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { reviews } from "./data"
+
+interface ImageData {
+    src: string;
+    altText?: string;
+    title?: string;
+    price?: number;
+    stock?: number;
+}
+
+interface DataDetail {
+    images?: string;
+    names?: string;
+    prices?: string;
+    descriptions?: string;
+    locations?: string;
+    harvestTimes?: string;
+    harvestProfits?: string;
+    sizeAreas?: string;
+}
 
 export default function Main() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [dataContent, setDataContent] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+        const responseData = async () => {
+            try {
+                const data: any = await fetchData();
+                setDataContent(data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Failed to fetch image data", error);
+            }
+        };
+
+        responseData();
+    }, []);
+
+    const filteredContent = dataContent.filter((token) => {
+      const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+      return name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    const handleDetail = (image: string, name: string, price: string, description: string) => () => {
+        const dataDetail = {
+            images: image,
+            names: name,
+            prices: price,
+            descriptions: description
+        }
+
+        localStorage.setItem("data_detail", JSON.stringify(dataDetail));
+        router.push("@/marketplace/detail");
+    }
+
+    const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+
+    const handlePrev = () => {
+        setCurrentReviewIndex((prevIndex) =>
+            prevIndex === 0 ? reviews.length - 1 : prevIndex - 1
+        );
+    };
+
+    const handleNext = () => {
+        setCurrentReviewIndex((prevIndex) =>
+            prevIndex === reviews.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
     return (
         <section className="text-gray-600 body-font">
             <div className="bg-landing-bg bg-cover bg-center text-gray-600 body-font">
@@ -14,72 +89,181 @@ export default function Main() {
                     </h2>
                     <div className="ml-6 text-center">
                         <BasicButton
-                            link="/"
+                            onclick={() => router.push("/login")}
                             title="SIGN UP"
                             fullWidth={false} />
                     </div>
                 </div>
             </div>
-            <h2 className="pt-40 mb-1 text-2xl font-semibold tracking-tighter text-center text-gray-200 lg:text-7xl md:text-6xl">
-                Clean and tidy code.
+            <section className="text-gray-600 body-font bg-cover bg-center py-24">
+                <div className="max-w-7xl mx-auto">
+                    <h2 className="text-3xl sm:text-5xl font-bold text-gray-200 text-center mb-12">
+                        How It Works
+                    </h2>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 text-center">
+                        {/* Step 1 */}
+                        <div className="bg-gray-800 rounded-lg p-6">
+                            <h3 className="text-xl font-semibold text-gray-100 mb-4">Step 1: Choose a Project</h3>
+                            <p className="text-gray-400">
+                                Browse available agricultural projects like apple orchards or organic farms. Each project is tokenized as an NFT, representing a stake in that farm.
+                            </p>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div className="bg-gray-800 rounded-lg p-6">
+                            <h3 className="text-xl font-semibold text-gray-100 mb-4">Step 2: Purchase an NFT</h3>
+                            <p className="text-gray-400">
+                                Buy an NFT on our platform. Your NFT represents your investment in the operational costs (seeds, labor, etc.) of a specific farm, providing you with a share of the harvest profits.
+                            </p>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div className="bg-gray-800 rounded-lg p-6">
+                            <h3 className="text-xl font-semibold text-gray-100 mb-4">Step 3: Earn & Trade</h3>
+                            <p className="text-gray-400">
+                                As the farm yields profits, NFT holders share in the income based on their stake. You can also trade your NFT on our marketplace to exit or expand your investment.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Call to Action */}
+                    <div className="text-center pt-12">
+                        <BasicButton
+                            onclick={() => router.push("/marketplace")}
+                            title="Start Investing"
+                            size="large"
+                            fullWidth={false}
+                        />
+                    </div>
+                </div>
+            </section>
+            <h2 className="pt-28 mb-1 text-2xl font-semibold tracking-tighter text-center text-gray-200 lg:text-7xl md:text-6xl">
+                Available NFTs for Purchase
             </h2>
             <br></br>
-            <p className="mx-auto text-xl text-center text-gray-300 font-normal leading-relaxed fs521 lg:w-2/3">
-                Here is our collection of free to use templates made with Next.js &
-                styled with Tailwind CSS.
-            </p>
             <div className="pt-12 pb-24 max-w-4xl mx-auto fsac4 md:px-1 px-3">
-                <div className="ktq4">
-                    <img className="w-10" src="https://nine4.app/favicon.png"></img>
-                    <h3 className="pt-3 font-semibold text-lg text-white">
-                        Lorem ipsum dolor sit amet
-                    </h3>
-                    <p className="pt-2 value-text text-md text-gray-200 fkrr1">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-                        tincidunt a libero in finibus. Maecenas a nisl vitae ante rutrum
-                        porttitor.
-                    </p>
-                </div>
-                <div className="ktq4">
-                    <img className="w-10" src="https://nine4.app/favicon.png"></img>
-                    <h3 className="pt-3 font-semibold text-lg text-white">
-                        Lorem ipsum dolor sit amet
-                    </h3>
-                    <p className="pt-2 value-text text-md text-gray-200 fkrr1">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-                        tincidunt a libero in finibus. Maecenas a nisl vitae ante rutrum
-                        porttitor.
-                    </p>
-                </div>
+                {loading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[...Array(3)].map((_, index) => (
+                            <div
+                                key={index}
+                                className="w-full sm:w-[250px] flex flex-col border border-[#393556] animate-pulse"
+                            >
+                                <div className="bg-gray-300 h-[304px] w-full"></div>
+                                <div className="p-2 gap-2">
+                                    <div className="bg-gray-300 h-4 w-3/4 mb-2"></div>
+                                    <div className="flex justify-between w-full">
+                                        <div className="bg-gray-300 h-4 w-1/4"></div>
+                                        <div className="bg-gray-300 h-4 w-1/4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
+                        {filteredContent.slice(0, 3).map((token, index) => {
+                            const image = token.metadata[0][0].find(([key]) => key === "image")?.[1];
+                            const name = token.metadata[0][0].find(([key]) => key === "name")?.[1];
+                            const price = token.metadata[0][0].find(([key]) => key === "price")?.[1];
+                            const description = token.metadata[0][0].find(([key]) => key === "description")?.[1];
+
+                            const getValue = (value: string | { Text: string } | { Nat: bigint }): string => {
+                                if (typeof value === "string") {
+                                    return value;
+                                } else if ('Text' in value) {
+                                    return value.Text;
+                                } else if ('Nat' in value) {
+                                    return value.Nat.toString();
+                                }
+                                return "N/A";
+                            };
+
+                            // Access values safely
+                            const imageUrl = image ? getValue(image) : "";
+                            const itemName = name ? getValue(name) : "Untitled";
+                            const itemPrice = price ? getValue(price) : "N/A";
+                            const itemDescription = description ? getValue(description) : "N/A";
+
+                            return (
+                                <div
+                                    key={index}
+                                    className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
+                                    onClick={handleDetail(imageUrl, itemName, itemPrice, itemDescription)}
+                                >
+                                    <Image
+                                        src={imageUrl}
+                                        alt={itemName}
+                                        width={200}
+                                        height={200}
+                                        className="sm:h-max-[200px] h-[200px] h-min-[200px] w-full rounded-t-lg object-cover"
+                                    />
+                                    <div className="p-2 gap-2 flex flex-col h-full">
+                                        <span className="text-lg font-semibold">{itemName}</span>
+                                        <div className="flex-grow"></div>
+                                        <div className="flex justify-between w-full">
+                                            <small className="text-[#FFD166]">{itemPrice !== "N/A" ? `${itemPrice} ETH` : "N/A"}</small>
+                                            <small>in stock: N/A</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
-            <div className="pt-32 pb-32 max-w-6xl mx-auto fsac4 md:px-1 px-3">
-                <div className="ktq4">
-                    <img src="https://nine4.app/images/nine4-3.png"></img>
-                    <h3 className="pt-3 font-semibold text-lg text-white">
-                        Lorem ipsum dolor sit amet
-                    </h3>
-                    <p className="pt-2 value-text text-md text-gray-200 fkrr1">
-                        Fusce pharetra ligula mauris, quis faucibus lectus elementum vel.
-                        Nullam vehicula, libero at euismod tristique, neque ligula faucibus
-                        urna, quis ultricies massa enim in nunc. Vivamus ultricies, quam ut
-                        rutrum blandit, turpis massa ornare velit, in sodales tellus ex nec
-                        odio.
-                    </p>
+            <section className="bg-gray-800 py-16 text-white">
+                <div className="max-w-4xl mx-auto text-center">
+                    <h2 className="text-4xl font-semibold mb-8">What Our Customers Are Saying</h2>
+
+                    {/* Review Card */}
+                    <div className="relative flex items-center justify-center">
+                        <div className="w-2/3 lg:w-1/3 h-[350px] flex flex-col justify-center">
+                            <Image
+                                src={reviews[currentReviewIndex].image}
+                                alt={reviews[currentReviewIndex].name}
+                                width={150}
+                                height={150}
+                                className="w-[150px] h-[150px] rounded-full object-cover object-center mx-auto mb-4"
+                            />
+                            <h3 className="text-2xl font-bold mb-2">
+                                {reviews[currentReviewIndex].name}
+                            </h3>
+                            <p className="text-lg italic overflow-hidden text-ellipsis">
+                                "{reviews[currentReviewIndex].review}"
+                            </p>
+                        </div>
+
+                        {/* Navigation Buttons */}
+                        <button
+                            onClick={handlePrev}
+                            className="absolute left-0 px-4 py-2 bg-gray-700 rounded-full hover:bg-gray-600"
+                        >
+                            &#9664;
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            className="absolute right-0 px-4 py-2 bg-gray-700 rounded-full hover:bg-gray-600"
+                        >
+                            &#9654;
+                        </button>
+                    </div>
+
+                    {/* Carousel Dots */}
+                    <div className="flex justify-center mt-6">
+                        {reviews.map((_, index) => (
+                            <div
+                                key={index}
+                                className={`h-3 w-3 rounded-full mx-1 ${index === currentReviewIndex
+                                    ? "bg-yellow-500"
+                                    : "bg-gray-500"
+                                    }`}
+                            ></div>
+                        ))}
+                    </div>
                 </div>
-                <div className="ktq4">
-                    <img src="https://nine4.app/images/nine4-3.png"></img>
-                    <h3 className="pt-3 font-semibold text-lg text-white">
-                        Lorem ipsum dolor sit amet
-                    </h3>
-                    <p className="pt-2 value-text text-md text-gray-200 fkrr1">
-                        Fusce pharetra ligula mauris, quis faucibus lectus elementum vel.
-                        Nullam vehicula, libero at euismod tristique, neque ligula faucibus
-                        urna, quis ultricies massa enim in nunc. Vivamus ultricies, quam ut
-                        rutrum blandit, turpis massa ornare velit, in sodales tellus ex nec
-                        odio.
-                    </p>
-                </div>
-            </div>
+            </section>
             <section className="relative pb-24">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
                     <div className="py-24 md:py-36">
@@ -104,6 +288,7 @@ export default function Main() {
                     </div>
                 </div>
             </section>
+
         </section>
     );
 }

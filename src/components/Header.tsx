@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { BasicButton } from "./Button";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,16 +29,15 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 w-full text-white z-50 transition-colors duration-300 ${
-        isScrolled ? "bg-black" : "bg-transparent"
-      }`}
+      className={`fixed top-0 w-full text-white z-50 transition-colors duration-300 ${isScrolled ? "bg-black" : "bg-transparent"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 flex justify-between items-center">
         <div className="text-3xl font-medium">
           <img src="/img/plantify.png" alt="Local Image" className="h-8" />
         </div>
 
-        <nav className="hidden md:flex space-x-8">
+        <nav className="hidden md:flex space-x-8 items-center">
           <a
             className="cursor-pointer text-gray-300 hover:text-white font-semibold"
             onClick={() => handleNavigation("/")}
@@ -46,6 +46,7 @@ export default function Header() {
           </a>
           <a
             className="cursor-pointer text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/about")}
           >
             About
           </a>
@@ -55,11 +56,11 @@ export default function Header() {
           >
             Marketplace
           </a>
-          <a
-            className="cursor-pointer text-gray-300 hover:text-white font-semibold"
-          >
-            How It Works
-          </a>
+          <BasicButton
+            onclick={() => router.push("/login")}
+            title="Login"
+            size="small"
+            fullWidth={false} />
         </nav>
 
         {/* Hamburger Menu Button */}
