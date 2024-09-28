@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { NFTData } from '@/types'
 
-interface DataDetail {
-  images?: string;
-  names?: string;
-  prices?: string;
-  descriptions?: string;
-  locations?: string;
-  harvestTimes?: string;
-  harvestProfits?: string;
-  sizeAreas?: string;
-}
+import useWallet from '@/hooks/use-wallet';
+import { convertE8sToICP } from '@/app/utils/convertE8sToICP'
 
 interface DetailContentProps {
-  dataDetail: DataDetail | null;
+  dataDetail: NFTData | null;
 }
 
 interface ModalProps {
@@ -21,7 +14,9 @@ interface ModalProps {
 }
 
 const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
+  const wallet = useWallet();
   const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false); // State to track if the button is processing
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);
 
@@ -57,16 +52,25 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  const handleBuyClick = (params: "success" | "fail") => {
-    if (params == "success") {
-      setShowModalSuccess(true);
-    } else {
-      setShowModalFailure(true);
+  const handleBuyClick = async () => {
+    if (!dataDetail?.prices) {
+      console.error("Price not available");
+      return;
     }
 
-    setTimeout(() => {
-      closeModal();
-    }, 3000);
+    try {
+      setProcessing(true); 
+      const priceInE8s = BigInt(dataDetail.prices * 1e8);
+
+      await wallet.transfer(priceInE8s);
+
+      setShowModalSuccess(true);
+    } catch (error) {
+      console.error('Transfer failed', error);
+      setShowModalFailure(true);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   const closeModal = () => {
@@ -78,7 +82,6 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     setTimeout(() => {
       setLoading(false);
     }, 2000);
-
   }, []);
 
   return (
@@ -122,37 +125,49 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-1">
                     <span className="text-2xl md:text-[36px] font-bold">
-                      {dataDetail?.names || "Name Not Available"}
+                      {dataDetail?.names || 'Name Not Available'}
                     </span>
-                    <small>{dataDetail?.locations || "Location Not Available"}</small>
+                    <small>
+                      {dataDetail?.locations || 'Location Not Available'}
+                    </small>
                   </div>
                   <button
-                    className="inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg"
-                    onClick={() => handleBuyClick("success")}
+                    className={`inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg ${processing ? 'cursor-not-allowed opacity-50' : ''}`}
+                    onClick={handleBuyClick}
+                    disabled={processing} // Disable button while processing
                   >
-                    BUY
+                    {processing ? "Processing..." : "BUY"} {/* Show "Processing..." while transferring */}
                   </button>
                 </div>
                 <small className="text-sm md:text-base">Current Price</small>
                 <div className="flex flex-col md:flex-row md:items-end gap-2 md:gap-6">
                   <span className="text-2xl md:text-4xl font-semibold">
-                    {dataDetail?.prices ? `${dataDetail.prices} ETH` : "Price Not Available"}
+                    {dataDetail?.prices ? `${convertE8sToICP(dataDetail.prices.toString())} ICP` : "Price Not Available"}
                   </span>
-                  <small className="text-sm md:text-base pb-1">$315.26/Take Profit
+                  <small className="text-sm md:text-base pb-1">
+                    Profit
                     <span className="font-semibold text-green-500">
                       {dataDetail?.harvestProfits ? (
-                        `  ${dataDetail.harvestProfits}`
+                        `  ${convertE8sToICP(dataDetail.harvestProfits.toString())}`
                       ) : (
                         "Take Profit Not Available"
-                      )} </span> ETH</small>
+                      )} </span> ICP</small>
                 </div>
                 <span className="text-lg md:text-[28px]">Description</span>
                 <p className="text-sm md:text-base">
-                  {dataDetail?.descriptions || "Description Not Available"}
+                  {dataDetail?.descriptions || 'Description Not Available'}
                 </p>
-                <span>Size Area : {dataDetail?.sizeAreas || "Size Area Not Available"}</span>
-                <span>Harvest Date : {dataDetail?.harvestTimes || "Harvest Date Not Available"}</span>
-
+                <span>
+                  Size Area :{' '}
+                  {dataDetail?.sizeAreas
+                    ? dataDetail?.sizeAreas / 10
+                    : 'Size Area Not Available'}{' '}
+                  Hecatare
+                </span>
+                <span>
+                  Harvest Date :{' '}
+                  {dataDetail?.harvestTimes || 'Harvest Date Not Available'}
+                </span>
               </div>
             </>
           )}

@@ -122,11 +122,11 @@ export const claimProfit = async (
           ['price', { Nat32: metadata.prices ?? 0 }],
           ['description', { Text: metadata.descriptions ?? '' }],
           ['location', { Text: metadata.locations ?? '' }],
-          ['harvest_date', { Text: metadata.harvestTimes ?? '' }],
+          ['harvest_time', { Text: metadata.harvestTimes ?? '' }],
           ['harvest_profit', { Nat32: metadata.harvestProfits ?? 0 }],
           ['size_area', { Nat32: metadata.sizeAreas ?? 0 }],
           ['lat', { Nat32: metadata.lat ?? 0 }],
-          ['lng', { Nat32: metadata.lng ?? 0 }],
+          ['long', { Nat32: metadata.long ?? 0 }],
           ['is_claimed', { Bool: true }]
         ]
       },

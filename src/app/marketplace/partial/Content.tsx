@@ -55,20 +55,6 @@ const Content: React.FC = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div>
-              <label htmlFor="">Location</label>
-              <select className="px-4 py-2 w-full bg-transparent border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="" className="text-black">
-                  Select Type
-                </option>
-                <option value="" className="text-black">
-                  haha
-                </option>
-                <option value="" className="text-black">
-                  haha
-                </option>
-              </select>
-            </div>
           </div>
         </div>
         <div className="h-auto md:h-screen w-full p-5">

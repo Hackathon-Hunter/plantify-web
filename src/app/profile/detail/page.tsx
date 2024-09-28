@@ -36,11 +36,11 @@ function Marketplace() {
           data[0][0].find(([key]: [string, any]) => key === 'location')?.[1]
             ?.Text || 0,
         harvestTimes:
-          data[0][0].find(([key]: [string, any]) => key === 'harvest_date')?.[1]
+          data[0][0].find(([key]: [string, any]) => key === 'harvest_time')?.[1]
             ?.Text || 0,
         harvestProfits:
           data[0][0].find(
-            ([key]: [string, any]) => key === 'harvest_profits'
+            ([key]: [string, any]) => key === 'harvest_profit'
           )?.[1]?.Nat || 0,
         sizeAreas:
           data[0][0].find(([key]: [string, any]) => key === 'size_area')?.[1]

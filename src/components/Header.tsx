@@ -1,12 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
+
+import useWallet from '@/hooks/use-wallet';
+
 import { BasicButton } from "./Button";
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const wallet = useWallet();
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -17,16 +23,22 @@ export default function Header() {
           setIsScrolled(false);
         }
       };
-  
+
       window.addEventListener("scroll", handleScroll);
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };
-  }
+    }
   }, []);
+  console.log(wallet.walletLoading, 'lin e32')
 
   const handleNavigation = (path: string) => {
     router.push(path);
+    setIsMenuOpen(false);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -59,15 +71,16 @@ export default function Header() {
             Marketplace
           </a>
           <BasicButton
-            onclick={() => router.push("/login")}
-            title="Connect Wallet"
+            onclick={wallet.connect}
+            title={wallet.isConnected ? "Wallet Connected" : "Connect Wallet"}
             size="small"
+            loading={wallet.walletLoading}
+            isDisable={wallet.isConnected}
             fullWidth={false} />
         </nav>
 
-        {/* Hamburger Menu Button */}
         <div className="md:hidden flex items-center">
-          <button className="text-white focus:outline-none">
+          <button className="text-white focus:outline-none" onClick={toggleMenu}>
             <svg
               className="w-6 h-6"
               fill="none"
@@ -85,6 +98,35 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      {isMenuOpen && (
+        <nav className="md:hidden bg-black text-white space-y-4 px-5 py-4">
+          <a
+            className="block text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/")}
+          >
+            Home
+          </a>
+          <a
+            className="block text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/about")}
+          >
+            About
+          </a>
+          <a
+            className="block text-gray-300 hover:text-white font-semibold"
+            onClick={() => handleNavigation("/marketplace")}
+          >
+            Marketplace
+          </a>
+          <BasicButton
+            onclick={() => router.push("/login")}
+            title="Connect Wallet"
+            size="small"
+            fullWidth={true}
+          />
+        </nav>
+      )}
     </header>
   );
 }
