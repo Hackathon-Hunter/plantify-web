@@ -67,9 +67,13 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail, sendBuyNft, i
 
       await wallet.transfer(priceInE8s);
 
-      await sendBuyNft();
+      const result = await sendBuyNft();
 
-      setShowModalSuccess(true);
+      if (result) {
+        setShowModalSuccess(true);
+      } else {
+        setShowModalFailure(true);
+      }
     } catch (error) {
       console.error('Transfer failed', error);
       setShowModalFailure(true);

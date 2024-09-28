@@ -94,6 +94,10 @@ export const buyNft = async (
       [transferArgs]
     );
 
+
+    console.log(result);
+    
+
     return result;
   } catch (error) {
     console.error('Error send data:', error);

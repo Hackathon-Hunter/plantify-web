@@ -95,33 +95,38 @@ function Marketplace() {
   const wallet = useWallet();
 
   const sendBuyNft = async () => {
-    if (dataDetail && wallet.principalId && tokenId) {
-      try {
-        await buyNft(wallet.principalId, tokenId);
-        fetchDetailData(tokenId);
-        return true;
-      } catch (error) {
-        return false;
-      }
-    } else {
+    console.log('send nft');
+    
+    const principalId: Principal =
+      await window.ic.infinityWallet.getPrincipal();
+    try {
+      await buyNft(principalId, tokenId!);
+      fetchDetailData(tokenId!);
+      return true;
+    } catch (error) {
+      console.log(error);
+
       return false;
     }
   };
 
   const fetchTokenOwner = async (id: number) => {
     const adminOnwer = Principal.from('yikut-daaaa-aaaam-qbdaq-cai');
-    
+
     if (id) {
       const owner = await tokenOwner(id);
 
-      if (owner[0][0]?.owner !== adminOnwer) {
+      if (owner[0][0]?.owner.toString() != adminOnwer.toString()) {
         setIsOwned(true);
       }
-      console.log("wallet.principalId", wallet.principalId);
-      
 
-      if (wallet.principalId === owner[0][0]?.owner.toString) {
-        setIsMyToken(true);
+      if (wallet.isConnected) {
+        const principalId: Principal =
+          await window.ic.infinityWallet.getPrincipal();
+
+        if (principalId.toString() === owner[0][0]?.owner.toString()) {
+          setIsMyToken(true);
+        }
       }
     }
   };

@@ -37,8 +37,6 @@ export default function useWallet(): IUseWallet {
 
   async function getPrincipal() {
     const id = await window.ic.infinityWallet.getPrincipal();
-    console.log(id);
-    
     setPrincipalId(id);
   }
 
