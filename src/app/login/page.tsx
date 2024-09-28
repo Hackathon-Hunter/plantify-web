@@ -11,7 +11,6 @@ const Login = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Logging in with", { email, password });
   };
 
   return (

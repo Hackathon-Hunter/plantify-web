@@ -64,7 +64,6 @@ export default function useWallet(): IUseWallet {
     const assets = await window.ic.infinityWallet.getUserAssets();
     // setProfile(assets);
     setWalletLoading(false)
-    console.log(`User's list of tokens/assets`, window.ic.infinityWallet);
   };
 
   const verifyConnection = useCallback(async () => {

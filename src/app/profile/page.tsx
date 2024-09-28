@@ -37,7 +37,6 @@ export default function Profile() {
         const data: any = await fetchProfileNft();
         setDataContent(data);
         setLoading(false);
-        console.log('dataaaaaa', data);
       } catch (error) {
         console.error('Failed to fetch image data', error);
       }
