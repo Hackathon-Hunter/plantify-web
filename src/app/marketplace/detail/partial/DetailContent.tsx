@@ -20,6 +20,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
   const [showModalSuccess, setShowModalSuccess] = useState(false);
   const [showModalFailure, setShowModalFailure] = useState(false);
 
+  console.log(wallet.isSuccessTransfer, 'line 23')
   const ModalSuccess: React.FC<ModalProps> = ({ closeModal }) => (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
@@ -59,7 +60,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     }
 
     try {
-      setProcessing(true); 
+      setProcessing(true);
       const priceInE8s = BigInt(dataDetail.prices * 1e8);
 
       await wallet.transfer(priceInE8s);

@@ -82,7 +82,7 @@ export default function Header() {
             onclick={wallet.connect}
             title={wallet.isConnected ? "Wallet Connected" : "Connect Wallet"}
             size="small"
-            loading={wallet.walletLoading}
+            loading={wallet.walletLoading && !wallet.isInstall}
             isDisable={wallet.isConnected}
             fullWidth={false} />
         </nav>

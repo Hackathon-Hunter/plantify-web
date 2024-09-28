@@ -32,8 +32,16 @@ export default function useWallet(): IUseWallet {
   const [balance, setBalance] = useState<number>(0);
   const [walletActor, setWalletActor] = useState<any>();
   const [principalId, setPrincipalId] = useState<PrincipalType>();
-
   const [walletLoading, setWalletLoading] = useState<boolean>(true); 
+  const [isInstall, setIsInstall] = useState<boolean>(false); 
+  const [isSuccessTransfer, setIsSuccessTransfer] = useState<boolean>(false); 
+  const [isFailTransfer, setIsFailTransfer] = useState<boolean>(false); 
+
+
+  const promptInstallBitfinity = () => {
+    alert('Bitfinity Wallet is not installed. Redirecting you to the download page.');
+    window.open('https://chromewebstore.google.com/detail/bitfinity-wallet/jnldfbidonfeldmalbflbmlebbipcnle', '_blank');
+  };
 
   async function getPrincipal() {
     const id = await window.ic.infinityWallet.getPrincipal();
@@ -42,8 +50,13 @@ export default function useWallet(): IUseWallet {
 
   async function connect() {
     try {
-      const nnsCanisterId =
-        process.env.CANISTER_ID_APP || 'bkyz2-fmaaa-aaaaa-qaaaq-cai';
+      if (!window.ic || !window.ic.infinityWallet) {
+        promptInstallBitfinity();
+        return;
+      }
+
+      const nnsCanisterId = 
+       process.env.CANISTER_ID_APP || 'bkyz2-fmaaa-aaaaa-qaaaq-cai';
       await window.ic.infinityWallet.requestConnect();
 
       const NNSUiActor = await window.ic.infinityWallet.createActor({
@@ -67,21 +80,25 @@ export default function useWallet(): IUseWallet {
   };
 
   const verifyConnection = useCallback(async () => {
-    const connected: boolean = await window.ic.infinityWallet.isConnected();
-    setWalletLoading(false)
-    setIsConnected(connected);
+    if(window.ic){
+      const connected: boolean = await window.ic.infinityWallet.isConnected();
+      setWalletLoading(false)
+      setIsConnected(connected);
+      return
+    }
+    setIsInstall(true)
   }, []);
 
-  const transfer = async (priceInE8s: bigint) => {
-    const TRANSFER_ICP_TX = {
+  const transfer = async (priceInE8s: number) => {
+    const TRANSFER_ICP_TX: any = {
       idl: idlFactory,
       canisterId: NNS_LEDGER_CID,
       methodName: 'send_dfx',
       args: [
         {
           to: 'fc9d25fbae9fb7c3a48c30fdbe172ea6ef0a949a863c2afd7bb3cf96578e2d3c',
-          fee: { e8s: BigInt(10000) }, 
-          amount: { e8s: BigInt(priceInE8s) },  
+          fee: { e8s: BigInt(10000) },
+          amount: { e8s: BigInt(100000) },  
           memo: 123,
           from_subaccount: [],
           created_at_time: []
@@ -94,14 +111,22 @@ export default function useWallet(): IUseWallet {
         console.log('transfer icp error', res);
       }
     };
-
+ 
     try {
+      if (!window.ic || !window.ic.infinityWallet) {
+        promptInstallBitfinity();
+        setIsSuccessTransfer(false)
+        return;
+      }
       const transfer = await window.ic.infinityWallet.batchTransactions(
         [TRANSFER_ICP_TX],
         { host: undefined }
       );
+      setIsSuccessTransfer(true)
+      setIsFailTransfer(false)
     } catch (error) {
-      console.log(error);
+      setIsSuccessTransfer(false)
+      setIsFailTransfer(true)
     }
   };
 
@@ -119,6 +144,9 @@ export default function useWallet(): IUseWallet {
     actor: walletActor,
     principalId: principalId,
     transfer,
-    walletLoading
+    walletLoading,
+    isInstall,
+    isFailTransfer,
+    isSuccessTransfer
   };
 }

@@ -79,6 +79,14 @@ export default function Main() {
 						collaborate, and cultivate the future of farming with innovative,
 						decentralized projects.
 					</h2>
+					{wallet.isInstall && (
+						<div className="ml-6 text-center">
+							<BasicButton
+								onclick={wallet.connect}
+								title="Connect Wallet"
+								fullWidth={false} />
+						</div>
+					)}
 					{!wallet.isConnected && !wallet.walletLoading && (
 						<div className="ml-6 text-center">
 							<BasicButton
