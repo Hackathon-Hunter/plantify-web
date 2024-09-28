@@ -6,6 +6,8 @@ import Image from "next/image";
 
 import { fetchData } from "../../../services/icService";
 
+import { BasicButton, SecondaryButton } from "../../../components/Button";
+
 const Content: React.FC = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -108,6 +110,11 @@ const Content: React.FC = () => {
                       <div className="flex flex-col gap-1 w-full">
                         <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
                         <span>{location || "Location Not Available"}</span>
+                        <BasicButton
+                          onclick={handleDetail(id)}
+                          title="Detail"
+                          fullWidth={true}
+                        />
                       </div>
                     </div>
                   </div>
