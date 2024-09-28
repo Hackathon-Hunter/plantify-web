@@ -1,36 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { BasicButton, SecondaryButton } from './Button';
-import { reviews } from './data';
-import { fetchData } from '../services/icService';
+import React, { useState, useEffect } from "react";
 
-interface ImageData {
-  src: string;
-  altText?: string;
-  title?: string;
-  price?: number;
-  stock?: number;
-}
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-interface DataDetail {
-  images?: string;
-  names?: string;
-  prices?: string;
-  descriptions?: string;
-  locations?: string;
-  harvestTimes?: string;
-  harvestProfits?: string;
-  sizeAreas?: string;
-}
+import useWallet from '@/hooks/use-wallet';
+
+import { fetchData } from "../services/icService";
+
+import { BasicButton, SecondaryButton } from "./Button";
+import { reviews } from "./data"
 
 export default function Main() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [dataContent, setDataContent] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+    const wallet = useWallet();
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [dataContent, setDataContent] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const responseData = async () => {
