@@ -46,9 +46,9 @@ export default function Main() {
         responseData();
     }, []);
 
-    const filteredContent = dataContent.filter((token) => {
-      const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
-      return name.toLowerCase().includes(searchTerm.toLowerCase());
+    const filteredContent = dataContent.filter((token: { metadata: any[][][] }) => {
+        const name = token.metadata[0][0].find(([key]: any[]) => key === "name")?.[1]?.Text || "Untitled";
+        return name.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
     const handleDetail = (image: string, name: string, price: string, description: string) => () => {
@@ -90,7 +90,7 @@ export default function Main() {
                     <div className="ml-6 text-center">
                         <BasicButton
                             onclick={() => router.push("/login")}
-                            title="SIGN UP"
+                            title="Connect Wallet"
                             fullWidth={false} />
                     </div>
                 </div>
@@ -163,11 +163,11 @@ export default function Main() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
-                        {filteredContent.slice(0, 3).map((token, index) => {
-                            const image = token.metadata[0][0].find(([key]) => key === "image")?.[1];
-                            const name = token.metadata[0][0].find(([key]) => key === "name")?.[1];
-                            const price = token.metadata[0][0].find(([key]) => key === "price")?.[1];
-                            const description = token.metadata[0][0].find(([key]) => key === "description")?.[1];
+                        {filteredContent.slice(0, 3).map((token: { metadata: any[][][] }, index) => {
+                            const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
+                            const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
+                            const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
+                            const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
 
                             const getValue = (value: string | { Text: string } | { Nat: bigint }): string => {
                                 if (typeof value === "string") {
