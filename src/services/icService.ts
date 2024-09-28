@@ -107,7 +107,6 @@ export const claimProfit = async (
 ): Promise<SetNFTResult[]> => {
   try {
     const adminPrincipal = Principal.from('yikut-daaaa-aaaam-qbdaq-cai');
-
     const NFTRequest: SetNFTItemRequest = {
       token_id: BigInt(tokenId),
       owner: [
@@ -118,23 +117,24 @@ export const claimProfit = async (
       ],
       metadata: {
         Map: [
-          ['images', { Text: metadata.images ?? '' }],
-          ['names', { Text: metadata.names ?? '' }],
-          ['prices', { Nat32: metadata.prices ?? 0 }],
-          ['descriptions', { Text: metadata.descriptions ?? '' }],
-          ['locations', { Text: metadata.locations ?? '' }],
-          ['harvestTimes', { Text: metadata.harvestTimes ?? '' }],
-          ['harvestProfits', { Nat32: metadata.harvestProfits ?? 0 }],
-          ['sizeAreas', { Text: metadata.sizeAreas ?? '' }],
+          ['image', { Text: metadata.images ?? '' }],
+          ['name', { Text: metadata.names ?? '' }],
+          ['price', { Nat32: metadata.prices ?? 0 }],
+          ['description', { Text: metadata.descriptions ?? '' }],
+          ['location', { Text: metadata.locations ?? '' }],
+          ['harvest_date', { Text: metadata.harvestTimes ?? '' }],
+          ['harvest_profit', { Nat32: metadata.harvestProfits ?? 0 }],
+          ['size_area', { Nat32: metadata.sizeAreas ?? 0 }],
           ['lat', { Nat32: metadata.lat ?? 0 }],
           ['lng', { Nat32: metadata.lng ?? 0 }],
-          ['isClaimed', { Bool: true }]
+          ['is_claimed', { Bool: true }]
         ]
       },
       memo: [],
       override: true,
-      created_at_time: [BigInt(Date.now())]
+      created_at_time: []
     };
+
     const result = await backendActor.claim_profit(adminPrincipal, [
       NFTRequest
     ]);

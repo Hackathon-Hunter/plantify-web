@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
+import type { Principal as PrincipalType } from '@dfinity/principal';
 import { IUseWallet } from '@/types/hooks';
 import { idlFactory } from './service.did';
 
@@ -29,7 +30,12 @@ export default function useWallet(): IUseWallet {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(0);
   const [walletActor, setWalletActor] = useState<any>();
-  const [principalId, setPrincipalId] = useState<string>();
+  const [principalId, setPrincipalId] = useState<PrincipalType>();
+
+  async function getPrincipal() {
+    const id = await window.ic.infinityWallet.getPrincipal();
+    setPrincipalId(id);
+  }
 
   async function connect() {
     try {
@@ -48,11 +54,6 @@ export default function useWallet(): IUseWallet {
     } catch (e) {
       throw e;
     }
-  }
-
-  async function getPrincipal() {
-    const id = await window.ic.infinityWallet.getPrincipal();
-    setPrincipalId(id);
   }
 
   const requestBalance = async () => {
@@ -93,7 +94,6 @@ export default function useWallet(): IUseWallet {
     };
 
     try {
-      console.log(TRANSFER_ICP_TX);
       const transfer = await window.ic.infinityWallet.batchTransactions(
         [TRANSFER_ICP_TX],
         {
@@ -107,6 +107,7 @@ export default function useWallet(): IUseWallet {
 
   useEffect(() => {
     verifyConnection();
+    getPrincipal()
   }, []);
 
   return {

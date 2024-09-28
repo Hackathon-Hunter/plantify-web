@@ -1,37 +1,33 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { BasicButton } from "@/components/Button";
-import { fetchProfileNft } from "../../services/icService";
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { BasicButton } from '@/components/Button';
+import { fetchProfileNft } from '../../services/icService';
 
 export default function Profile() {
   const router = useRouter();
   const [dataContent, setDataContent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleDetail = (
-    image?: string,
-    name?: string,
-    price?: string,
-    description?: string,
-    location?: string,
-    harvestTime?: string,
-    harvestProfit?: string,
-    sizeArea?: string) => () => {
-      router.push(
-        `/profile/detail?image=${encodeURIComponent(image ?? "")}&name=${encodeURIComponent(name ?? "")}&price=${encodeURIComponent(price ?? "")}&description=${encodeURIComponent(description ?? "")}&location=${encodeURIComponent(location ?? "")}&harvestTime=${encodeURIComponent(harvestTime ?? "")}&harvestProfit=${encodeURIComponent(harvestProfit ?? "")}&sizeArea=${encodeURIComponent(sizeArea ?? "")}`
-      );
+  const handleDetail = (id?: string) => {
+    return () => {
+      router.push(`/profile/detail?id=${id}`);
+    };
+  };
+
+  const filteredContent = dataContent.filter(
+    (token: { metadata: any[][][] }) => {
+      const name =
+        token.metadata[0][0].find(([key]) => key === 'name')?.[1]?.Text ||
+        'Untitled';
+      return name.toLowerCase().includes(searchTerm.toLowerCase());
     }
-
-  const filteredContent = dataContent.filter((token: { metadata: any[][][] }) => {
-    const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
-    return name.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  );
 
   useEffect(() => {
     const responseData = async () => {
@@ -39,9 +35,9 @@ export default function Profile() {
         const data: any = await fetchProfileNft();
         setDataContent(data);
         setLoading(false);
-        console.log('dataaaaaa', data)
+        console.log('dataaaaaa', data);
       } catch (error) {
-        console.error("Failed to fetch image data", error);
+        console.error('Failed to fetch image data', error);
       }
     };
 
@@ -77,7 +73,9 @@ export default function Profile() {
           {/* Name and Email - Side by Side */}
           <div className="flex flex-col">
             <span className="text-[24px] font-bold">John Doe</span>
-            <span className="text-[16px] text-slate-500">johndoe@gmail.com</span>
+            <span className="text-[16px] text-slate-500">
+              johndoe@gmail.com
+            </span>
           </div>
         </div>
 
@@ -103,50 +101,85 @@ export default function Profile() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 mb-52">
-              {filteredContent.map((token: { metadata: any[][][] }, index: React.Key | null | undefined) => {
-                const image = token.metadata[0][0].find(([key]) => key === "image")?.[1]?.Text || "";
-                const name = token.metadata[0][0].find(([key]) => key === "name")?.[1]?.Text || "Untitled";
-                const price = token.metadata[0][0].find(([key]) => key === "price")?.[1]?.Nat.toString() || "N/A";
-                const description = token.metadata[0][0].find(([key]) => key === "description")?.[1]?.Text || "N/A";
-                const location = token.metadata[0][0].find(([key]) => key === "location")?.[1]?.Text || "N/A";
-                const harvestTime = token.metadata[0][0].find(([key]) => key === "harvest_date")?.[1]?.Text || "N/A";
-                const harvestProfit = token.metadata[0][0].find(([key]) => key === "harvest_profits")?.[1]?.Nat.toString() || "N/A";
-                const sizeArea = token.metadata[0][0].find(([key]) => key === "size_area")?.[1]?.Nat.toString() || "N/A";
+              {filteredContent.map(
+                (
+                  token: { id: string; metadata: any[][][] },
+                  index: React.Key | null | undefined
+                ) => {
+                  const image =
+                    token.metadata[0][0].find(([key]) => key === 'image')?.[1]
+                      ?.Text || '';
+                  const name =
+                    token.metadata[0][0].find(([key]) => key === 'name')?.[1]
+                      ?.Text || 'Untitled';
+                  const price =
+                    token.metadata[0][0]
+                      .find(([key]) => key === 'price')?.[1]
+                      ?.Nat.toString() || 'N/A';
+                  const description =
+                    token.metadata[0][0].find(
+                      ([key]) => key === 'description'
+                    )?.[1]?.Text || 'N/A';
+                  const location =
+                    token.metadata[0][0].find(
+                      ([key]) => key === 'location'
+                    )?.[1]?.Text || 'N/A';
+                  const harvestTime =
+                    token.metadata[0][0].find(
+                      ([key]) => key === 'harvest_date'
+                    )?.[1]?.Text || 'N/A';
+                  const harvestProfit =
+                    token.metadata[0][0]
+                      .find(([key]) => key === 'harvest_profits')?.[1]
+                      ?.Nat.toString() || 'N/A';
+                  const sizeArea =
+                    token.metadata[0][0]
+                      .find(([key]) => key === 'size_area')?.[1]
+                      ?.Nat.toString() || 'N/A';
+                  const id =
+                    token.id !== undefined && token.id !== null
+                      ? token.id.toString()
+                      : 'N/A';
 
-                return (
-                  <div
-                    key={index}
-                    className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
-                    onClick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
-                  >
-                    {image ? (
-                      <Image
-                        src={image}
-                        alt={name}
-                        height={150}
-                        width={150}
-                        className="rounded-md object-cover h-[250px] w-[350px]"
-                      />
-                    ) : (
-                      <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
-                    )}
-                    <div className="flex flex-col mt-3 w-full">
-                      {/* NFT Title */}
-                      <span className="text-md font-semibold mb-1">
-                        {name || "Name Not Available"}
-                      </span>
-                      {/* NFT Price */}
-                      <small className="text-[#FFD166] mb-3">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
-                      {/* Detail Button */}
-                      <BasicButton
-                        onclick={handleDetail(image, name, price, description, location, harvestTime, harvestProfit, sizeArea)}
-                        title="Detail"
-                        fullWidth={true}
-                      />
+                  return (
+                    <div
+                      key={index}
+                      className="w-full sm:w-[250px] flex flex-col rounded-lg border border-[#393556]"
+                      onClick={handleDetail(id)}
+                    >
+                      {image ? (
+                        <Image
+                          src={image}
+                          alt={name}
+                          height={150}
+                          width={150}
+                          className="rounded-md object-cover h-[250px] w-[350px]"
+                        />
+                      ) : (
+                        <div className="bg-gray-300 animate-pulse w-full h-[200px] rounded-md"></div>
+                      )}
+                      <div className="flex flex-col mt-3 w-full">
+                        {/* NFT Title */}
+                        <span className="text-md font-semibold mb-1">
+                          {name || 'Name Not Available'}
+                        </span>
+                        {/* NFT Price */}
+                        <small className="text-[#FFD166] mb-3">
+                          {price !== 'Price Not Available'
+                            ? `${price} ETH`
+                            : 'Price Not Available'}
+                        </small>
+                        {/* Detail Button */}
+                        <BasicButton
+                          onclick={handleDetail(id)}
+                          title="Detail"
+                          fullWidth={true}
+                        />
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
             </div>
           )}
         </div>

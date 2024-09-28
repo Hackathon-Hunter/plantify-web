@@ -1,3 +1,5 @@
+import type { Principal } from "@dfinity/principal"
+
 export interface IUseWallet {
   balance: number;
   isConnected: boolean;
@@ -5,5 +7,5 @@ export interface IUseWallet {
   reqBalance: () => void;
   actor: any;
   transfer: () => void;
-  principalId?: string;
+  principalId?: Principal;
 }
