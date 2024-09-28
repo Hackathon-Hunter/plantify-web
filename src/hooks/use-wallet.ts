@@ -1,7 +1,9 @@
-import { IUseWallet } from '@/types/hooks';
 import { useCallback, useEffect, useState } from 'react';
+
 import { AccountIdentifier } from '@dfinity/ledger-icp';
 import { Principal } from '@dfinity/principal';
+
+import { IUseWallet } from '@/types/hooks';
 import { idlFactory } from './service.did';
 
 export const NNS_LEDGER_CID = 'ryjl3-tyaaa-aaaaa-aaaba-cai';
@@ -29,6 +31,7 @@ export default function useWallet(): IUseWallet {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(0);
   const [walletActor, setWalletActor] = useState<any>();
+  const [walletLoading, setWalletLoading] = useState<boolean>(true); 
 
   async function connect() {
     try {
@@ -39,40 +42,40 @@ export default function useWallet(): IUseWallet {
       const NNSUiActor = await window.ic.infinityWallet.createActor({
         canisterId: nnsCanisterId,
         interfaceFactory: nnsPartialInterfaceFactory,
-        host: 'http://localhost:4943/'
+        host: undefined
       });
 
       setWalletActor(NNSUiActor);
+      setWalletLoading(false)
       setIsConnected(true);
     } catch (e) {
       throw e;
     }
   }
 
-  const requestBalance = async () => {
+  const reqBalance = async () => {
     const assets = await window.ic.infinityWallet.getUserAssets();
-    console.log(`User's list of tokens/assets`, assets);
+    // setProfile(assets);
+    setWalletLoading(false)
+    console.log(`User's list of tokens/assets`, window.ic.infinityWallet);
   };
 
   const verifyConnection = useCallback(async () => {
     const connected: boolean = await window.ic.infinityWallet.isConnected();
+    setWalletLoading(false)
     setIsConnected(connected);
   }, []);
 
-  const transfer = async () => {
+  const transfer = async (priceInE8s: bigint) => {
     const TRANSFER_ICP_TX = {
       idl: idlFactory,
       canisterId: NNS_LEDGER_CID,
       methodName: 'send_dfx',
       args: [
         {
-          to: AccountIdentifier.fromPrincipal({
-            principal: Principal.from(
-              'defj4-nolus-e5dx5-xkqpd-tf7nx-4j63j-wdv44-p2e47-2jqsb-bxqgi-hqe'
-            )
-          }).toHex(),
-          fee: { e8s: BigInt(10000) },
-          amount: { e8s: BigInt(100000) },
+          to: 'fc9d25fbae9fb7c3a48c30fdbe172ea6ef0a949a863c2afd7bb3cf96578e2d3c',
+          fee: { e8s: BigInt(10000) }, 
+          amount: { e8s: BigInt(priceInE8s) },  
           memo: 123,
           from_subaccount: [],
           created_at_time: []
@@ -90,9 +93,7 @@ export default function useWallet(): IUseWallet {
       console.log(TRANSFER_ICP_TX);
       const transfer = await window.ic.infinityWallet.batchTransactions(
         [TRANSFER_ICP_TX],
-        {
-          host: undefined
-        }
+        { host: undefined }
       );
     } catch (error) {
       console.log(error);
@@ -107,8 +108,9 @@ export default function useWallet(): IUseWallet {
     balance: balance,
     isConnected: isConnected,
     connect: connect,
-    reqBalance: requestBalance,
+    reqBalance: reqBalance,
     actor: walletActor,
-    transfer: transfer
+    transfer,
+    walletLoading
   };
 }

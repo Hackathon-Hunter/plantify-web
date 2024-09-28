@@ -1,12 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
+
+import useWallet from '@/hooks/use-wallet';
+
 import { BasicButton } from "./Button";
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const wallet = useWallet();
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -17,13 +22,14 @@ export default function Header() {
           setIsScrolled(false);
         }
       };
-  
+
       window.addEventListener("scroll", handleScroll);
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };
-  }
+    }
   }, []);
+  console.log(wallet.walletLoading, 'lin e32')
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -60,8 +66,10 @@ export default function Header() {
           </a>
           <BasicButton
             onclick={() => router.push("/login")}
-            title="Connect Wallet"
+            title={wallet.isConnected ? "Wallet Connected" : "Connect Wallet"}
             size="small"
+            loading={wallet.walletLoading}
+            isDisable={wallet.isConnected}
             fullWidth={false} />
         </nav>
 

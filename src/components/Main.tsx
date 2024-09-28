@@ -1,10 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { BasicButton, SecondaryButton } from "./Button";
-import { fetchData } from "../services/icService";
+
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
+import useWallet from '@/hooks/use-wallet';
+import { fetchData } from "../services/icService";
+
+import { BasicButton, SecondaryButton } from "./Button";
 import { reviews } from "./data"
 
 interface ImageData {
@@ -27,6 +31,7 @@ interface DataDetail {
 }
 
 export default function Main() {
+    const wallet = useWallet();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [dataContent, setDataContent] = useState([]);
@@ -87,12 +92,14 @@ export default function Main() {
                     <h2 className="text-1xl font-4 font-semibold lh-6 ld-04 pb-11 text-gray-400 text-center">
                         Invest in the Harvest: Empower Agriculture with MetaFarm. Finance, share, and grow with NFT-driven farming projects.
                     </h2>
-                    <div className="ml-6 text-center">
-                        <BasicButton
-                            onclick={() => router.push("/login")}
-                            title="Connect Wallet"
-                            fullWidth={false} />
-                    </div>
+                    {!wallet.isConnected && !wallet.walletLoading && (
+                        <div className="ml-6 text-center">
+                            <BasicButton
+                                onclick={wallet.connect}
+                                title="Connect Wallet"
+                                fullWidth={false} />
+                        </div>
+                    )}
                 </div>
             </div>
             <section className="text-gray-600 body-font bg-cover bg-center py-24">

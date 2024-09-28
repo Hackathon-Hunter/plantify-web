@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+import { convertE8sToICP } from '../../../utils/convertE8sToICP';
 import { fetchData } from "../../../../services/icService";
 
 const ListMoreContent = () => {
@@ -89,7 +91,7 @@ const ListMoreContent = () => {
                       <span className="text-lg font-semibold">{name || "Name Not Available"}</span>
                       <div className="flex-grow"></div>
                       <div className="flex flex-col gap-1 w-full">
-                        <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${price} ETH` : "Price Not Available"}</small>
+                        <small className="text-[#FFD166]">{price !== "Price Not Available" ? `${convertE8sToICP(price)} ICP` : "Price Not Available"}</small>
                         <span>{location || "Location Not Available"}</span>
                       </div>
                     </div>
