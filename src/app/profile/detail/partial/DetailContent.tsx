@@ -30,7 +30,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Success</h2>
         <iframe src="https://lottie.host/embed/4fbef5ad-e560-432b-9a27-5c4d69a5ef68/Xe0JrH7dWt.json"></iframe>
-        <p>Your claim profit successful!</p>
+        <p>Your claim request has been successfully sent</p>
         <button
           className="mt-4 bg-green-500 text-white py-2 px-4 rounded"
           onClick={closeModal}
@@ -46,7 +46,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Failed</h2>
         <iframe src="https://lottie.host/embed/88bdeed6-7fc5-4a23-9437-61bbd68088d7/xjBVU3dE5M.json"></iframe>
-        <p>Your purchase has failed. Please try again.</p>
+        <p>Your claim request failed to send</p>
         <button
           className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
           onClick={closeModal}
@@ -57,7 +57,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
     </div>
   );
 
-  const handleBuyClick = (params: "success" | "fail") => {
+  const handleClaimClick = (params: "success" | "fail") => {
     if (params == "success") {
       setShowModalSuccess(true);
     } else {
@@ -126,7 +126,7 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                     <small>{dataDetail?.locations || "Location Not Available"}</small>
                   </div>
                   <BasicButton
-                    onclick={() => handleBuyClick("success")}
+                    onclick={() => handleClaimClick("success")}
                     title="CLAIM PROFIT"
                     fullWidth={false}
                     isDisable={currentDate > harvestDate ? false : true}
