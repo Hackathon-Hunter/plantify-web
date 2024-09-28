@@ -6,7 +6,7 @@ export interface IUseWallet {
   connect: () => void,
   reqBalance: () => void,
   actor: any,
-  transfer: (priceInE8s: bigint) => Promise<void>,
+  transfer: (priceInE8s: number) => Promise<void>,
   walletLoading: boolean,
   principalId?: Principal;
 }

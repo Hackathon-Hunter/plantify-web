@@ -4,6 +4,7 @@ import { idlFactory as backendIdlFactory } from './plantify.did.js';
 import { NFTData } from '@/types/index.js';
 import { IDL } from '@dfinity/candid';
 import type {
+  OwnerOfResponse,
   Plantify,
   SetNFTItemRequest,
   SetNFTResult,
@@ -143,4 +144,9 @@ export const claimProfit = async (
     console.error('Error send data:', error);
     throw error;
   }
+};
+
+export const tokenOwner = async (tokenId: number): Promise<OwnerOfResponse> => {
+  const result = await backendActor.tokens_owner([BigInt(tokenId)]);
+  return result;
 };

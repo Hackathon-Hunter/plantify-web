@@ -37,6 +37,8 @@ export default function useWallet(): IUseWallet {
 
   async function getPrincipal() {
     const id = await window.ic.infinityWallet.getPrincipal();
+    console.log(id);
+    
     setPrincipalId(id);
   }
 
@@ -69,12 +71,13 @@ export default function useWallet(): IUseWallet {
 
   const verifyConnection = useCallback(async () => {
     const connected: boolean = await window.ic.infinityWallet.isConnected();
+    getPrincipal()
     setWalletLoading(false)
     setIsConnected(connected);
   }, []);
 
-  const transfer = async (priceInE8s: bigint) => {
-    const TRANSFER_ICP_TX = {
+  const transfer = async (priceInE8s: number) => {
+    const TRANSFER_ICP_TX: any = {
       idl: idlFactory,
       canisterId: NNS_LEDGER_CID,
       methodName: 'send_dfx',
@@ -82,7 +85,7 @@ export default function useWallet(): IUseWallet {
         {
           to: 'fc9d25fbae9fb7c3a48c30fdbe172ea6ef0a949a863c2afd7bb3cf96578e2d3c',
           fee: { e8s: BigInt(10000) }, 
-          amount: { e8s: BigInt(priceInE8s) },  
+          amount: { e8s: BigInt(100000) },  
           memo: 123,
           from_subaccount: [],
           created_at_time: []
@@ -108,9 +111,7 @@ export default function useWallet(): IUseWallet {
 
   useEffect(() => {
     verifyConnection();
-
-    if(isConnected) getPrincipal()
-  }, [isConnected]);
+  }, []);
 
   return {
     balance: balance,

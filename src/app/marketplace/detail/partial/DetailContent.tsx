@@ -7,13 +7,16 @@ import { convertE8sToICP } from '@/app/utils/convertE8sToICP'
 
 interface DetailContentProps {
   dataDetail: NFTData | null;
+  sendBuyNft: () => Promise<boolean>,
+  isOwned: boolean,
+  isMyToken: boolean
 }
 
 interface ModalProps {
   closeModal: () => void;
 }
 
-const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
+const DetailContent: React.FC<DetailContentProps> = ({ dataDetail, sendBuyNft, isMyToken, isOwned }) => {
   const wallet = useWallet();
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false); // State to track if the button is processing
@@ -60,9 +63,11 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
 
     try {
       setProcessing(true); 
-      const priceInE8s = BigInt(dataDetail.prices * 1e8);
+      const priceInE8s = 10000;
 
       await wallet.transfer(priceInE8s);
+
+      await sendBuyNft();
 
       setShowModalSuccess(true);
     } catch (error) {
@@ -83,6 +88,18 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
       setLoading(false);
     }, 2000);
   }, []);
+
+  const genTextButton = (): string => {
+    if (isMyToken) {
+      return 'OWNED BY ME'
+    }
+
+    if (isOwned) {
+      return 'OWNED BY OTHERS'
+    }
+
+    return 'BUY'
+  }
 
   return (
     <>
@@ -134,9 +151,9 @@ const DetailContent: React.FC<DetailContentProps> = ({ dataDetail }) => {
                   <button
                     className={`inline-flex items-center justify-center font-semibold tracking-tighter text-white transition duration-500 ease-in-out transform bg-transparent w-fit bg-gradient-to-r from-blue-800 to-teal-500 py-3 px-10 text-md focus:shadow-outline rounded-lg ${processing ? 'cursor-not-allowed opacity-50' : ''}`}
                     onClick={handleBuyClick}
-                    disabled={processing} // Disable button while processing
+                    disabled={processing || isOwned || isMyToken} // Disable button while processing
                   >
-                    {processing ? "Processing..." : "BUY"} {/* Show "Processing..." while transferring */}
+                    {processing ? "Processing..." : genTextButton()}
                   </button>
                 </div>
                 <small className="text-sm md:text-base">Current Price</small>

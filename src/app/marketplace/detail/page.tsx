@@ -3,18 +3,27 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { fetchDataDetail } from '../../../services/icService';
+import {
+  buyNft,
+  fetchDataDetail,
+  tokenOwner
+} from '../../../services/icService';
 
 import Header from '@/components/Header';
 import DetailContent from './partial/DetailContent';
 import DetailLocation from './partial/DetailLocation';
 import ListMoreContent from './partial/ListMoreContent';
 import { NFTData } from '@/types';
+import useWallet from '@/hooks/use-wallet';
+import { Principal } from '@dfinity/principal';
 
 function Marketplace() {
   const searchParams = useSearchParams();
   const [dataDetail, setDataDetail] = useState<NFTData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tokenId, setTokenId] = useState<number>();
+  const [isOwned, setIsOwned] = useState(false);
+  const [isMyToken, setIsMyToken] = useState(false);
 
   const fetchDetailData = async (id: number) => {
     try {
@@ -83,12 +92,48 @@ function Marketplace() {
     }
   };
 
+  const wallet = useWallet();
+
+  const sendBuyNft = async () => {
+    if (dataDetail && wallet.principalId && tokenId) {
+      try {
+        await buyNft(wallet.principalId, tokenId);
+        fetchDetailData(tokenId);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const fetchTokenOwner = async (id: number) => {
+    const adminOnwer = Principal.from('yikut-daaaa-aaaam-qbdaq-cai');
+    
+    if (id) {
+      const owner = await tokenOwner(id);
+
+      if (owner[0][0]?.owner !== adminOnwer) {
+        setIsOwned(true);
+      }
+      console.log("wallet.principalId", wallet.principalId);
+      
+
+      if (wallet.principalId === owner[0][0]?.owner.toString) {
+        setIsMyToken(true);
+      }
+    }
+  };
+
   useEffect(() => {
     const idParams = searchParams.get('id');
     const numericId = idParams ? parseInt(idParams) : null;
 
     if (numericId !== null) {
       setLoading(true);
+      setTokenId(numericId);
+      fetchTokenOwner(numericId);
       fetchDetailData(numericId);
     } else {
       console.warn('Invalid ID parameter');
@@ -99,7 +144,12 @@ function Marketplace() {
   return (
     <div>
       <Header />
-      <DetailContent dataDetail={dataDetail} />
+      <DetailContent
+        dataDetail={dataDetail}
+        sendBuyNft={sendBuyNft}
+        isMyToken={isMyToken}
+        isOwned={isOwned}
+      />
       <DetailLocation lat={dataDetail?.lat} long={dataDetail?.long} />
       <ListMoreContent />
     </div>

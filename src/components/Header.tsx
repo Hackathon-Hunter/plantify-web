@@ -65,7 +65,7 @@ export default function Header() {
             Marketplace
           </a>
           <BasicButton
-            onclick={() => router.push("/login")}
+            onclick={() => {}}
             title={wallet.isConnected ? "Wallet Connected" : "Connect Wallet"}
             size="small"
             loading={wallet.walletLoading}
